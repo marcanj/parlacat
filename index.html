@@ -1,0 +1,1205 @@
+<!doctype html><html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Català C1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Disseny: quadern d'estudi mediterrani — columna única, blau de mar i ocre com a subratllador */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --sunk:#e9edf3; --ink:#152030; --muted:#5a6676; --line:#d9e0e8;
+  --accent:#1c5aa6; --accent-ink:#ffffff; --soft:#e3ecf8; --ochre:#d9971a; --ochre-soft:#fbefd6;
+  --ok:#2b7a4b; --ok-soft:#e1f2e7; --bad:#b83a2e; --bad-soft:#f9e3e0;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141b; --surface:#171f29; --sunk:#121922; --ink:#e7ecf2; --muted:#9aa6b4; --line:#273242;
+  --accent:#6aa2ea; --accent-ink:#0b1422; --soft:#1a2a40; --ochre:#efb544; --ochre-soft:#33280f;
+  --ok:#5cc08a; --ok-soft:#14301f; --bad:#f0806f; --bad-soft:#3a1a16; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#171f29; --sunk:#121922; --ink:#e7ecf2; --muted:#9aa6b4; --line:#273242;
+  --accent:#6aa2ea; --accent-ink:#0b1422; --soft:#1a2a40; --ochre:#efb544; --ochre-soft:#33280f;
+  --ok:#5cc08a; --ok-soft:#14301f; --bad:#f0806f; --bad-soft:#3a1a16; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:1.6rem;letter-spacing:-.02em;margin:0}
+.brand h1 span{color:var(--accent)}
+.sync{font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+nav.tabs button{font:inherit;font-size:.95rem;background:none;border:0;color:var(--muted);padding:8px 12px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+main{padding-top:22px;display:flex;flex-direction:column;gap:22px}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.35rem;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:700;font-size:1.08rem;margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.btn{font:inherit;font-weight:700;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 16px;cursor:pointer;min-height:44px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:focus-visible,nav.tabs button:focus-visible,.opt:focus-visible,input:focus-visible,.cell:focus-visible,.chip:focus-visible,.key:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* Avui */
+.today{display:grid;gap:14px}
+.today .when{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.blocks{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.blocks li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;background:var(--sunk);border-radius:8px}
+.blocks .n{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.blocks .min{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+.weekstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.ws{border:1px solid var(--line);border-radius:8px;padding:8px 6px;text-align:center;font-size:.8rem;background:var(--surface);cursor:pointer;color:var(--ink);font-family:inherit}
+.ws b{display:block;font-family:var(--f-mono);font-size:.95rem}
+.ws.done{background:var(--ok-soft);border-color:transparent}
+.ws.now{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.meter{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{padding:12px;border-radius:8px;background:var(--sunk)}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;font-variant-numeric:tabular-nums}
+/* Calendari */
+.cal{display:grid;gap:6px}
+.wk{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:10px 0;border-top:1px solid var(--line)}
+.wk header{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.wk .num{font-family:var(--f-mono);font-weight:600;color:var(--accent)}
+.wk .cells{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.cell{font:inherit;font-size:.78rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:6px 4px;text-align:center;cursor:pointer;min-height:44px}
+.cell small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:.68rem}
+.cell.done{background:var(--ok-soft);border-color:transparent}
+.cell.now{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cell.exam{border-style:dashed;border-color:var(--ochre)}
+.wk.consol .num{color:var(--ochre)}
+/* Sessió */
+.sess-top{display:grid;gap:8px}
+.qcard{display:grid;gap:14px}
+.qtext{font-size:1.2rem;line-height:1.45}
+.qtext b{background:linear-gradient(transparent 62%,var(--ochre-soft) 62%);font-weight:700}
+.qtext .word,.qtext .clock{font-family:var(--f-mono);font-size:1.3rem;background:none}
+.qtext .verb{font-family:var(--f-display);font-weight:800;font-size:1.8rem;letter-spacing:-.01em}
+.gap{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+.qsub{color:var(--muted)}
+.qsub b{color:var(--ink)}
+.answer{display:flex;gap:8px;flex-wrap:wrap}
+.answer input{flex:1 1 220px;min-width:0;font:inherit;font-size:1.15rem;padding:10px 12px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.answer input.ok{border-color:var(--ok)} .answer input.ko{border-color:var(--bad)}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+.key{font-family:var(--f-mono);font-size:1rem;min-width:40px;min-height:40px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);cursor:pointer}
+.opts{display:grid;gap:8px}
+.opt{font:inherit;font-size:1.05rem;text-align:left;padding:12px 14px;border-radius:8px;border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)} .opt.ko{border-color:var(--bad);background:var(--bad-soft)}
+.fb{border-radius:8px;padding:12px 14px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft)} .fb.ko{background:var(--bad-soft)}
+.fb .verdict{font-weight:700}
+.fb.ok .verdict{color:var(--ok)} .fb.ko .verdict{color:var(--bad)}
+.ptable{border-collapse:collapse;margin-top:6px;font-size:.92rem}
+.ptable td{padding:2px 12px 2px 0}
+.ptable tr.hl td{font-weight:700;color:var(--accent)}
+.ptable td:first-child{color:var(--muted);font-family:var(--f-mono);font-size:.8rem}
+.result{display:grid;gap:12px;text-align:left}
+.bigscore{font-family:var(--f-display);font-weight:800;font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.errlist{margin:0;padding-left:18px;display:grid;gap:4px}
+/* Practica / teoria */
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--sunk);color:var(--ink);border-radius:99px;padding:6px 12px;cursor:pointer;min-height:36px}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.theory{display:grid;gap:14px}
+.theory h4{font-family:var(--f-display);font-size:1rem;margin:8px 0 0}
+.theory p,.theory li{max-width:65ch}
+.theory ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;font-size:.92rem;min-width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:6px 10px 6px 0;text-align:left;vertical-align:top}
+.tbl th{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.modbar{display:grid;grid-template-columns:120px 1fr 64px;gap:10px;align-items:center;font-size:.92rem}
+.modbar span:last-child{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.confirm{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px;border-radius:8px;background:var(--bad-soft)}
+input[type=date]{font:inherit;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+@media (max-width:480px){nav.tabs button{padding:8px 8px 10px;font-size:.9rem}.stat b{font-size:1.2rem}.stat{padding:10px}.stat .muted{font-size:.8rem}.modbar{grid-template-columns:90px 1fr 54px}.qtext .verb{font-size:1.5rem}.blocks li{grid-template-columns:1fr auto}.blocks .n{display:none}}
+@media (prefers-reduced-motion:no-preference){.meter i{transition:width .3s ease}}
+</style>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>Català <span>C1</span></h1><span class="sync" id="sync">Desat en aquest navegador</span></div>
+    <nav class="tabs" id="tabs">
+      <button data-v="avui">Avui</button><button data-v="cal">Calendari</button><button data-v="prac">Practica</button><button data-v="teo">Teoria</button><button data-v="prog">Progrés</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+<script>
+// ===== VERBS =====
+const PERS = ['jo','tu','ell / ella','nosaltres','vosaltres','ells / elles'];
+const E6 = (s,e)=>e.map(x=>s+x);
+const G = {
+  ava: s=>E6(s,['ava','aves','ava','àvem','àveu','aven']),
+  ia:  s=>E6(s,['ia','ies','ia','íem','íeu','ien']),
+  eia: s=>E6(s,['eia','eies','eia','èiem','èieu','eien']),
+  uia: s=>E6(s,['uia','uies','uia','úiem','úieu','uien']),
+  gui: s=>E6(s,['i','is','i','em','eu','in']),
+  se:  s=>E6(s,['és','essis','és','éssim','éssiu','essin']),
+  si:  s=>E6(s,['ís','issis','ís','íssim','íssiu','issin']),
+};
+// v(inf, glossa, nivell, present, imperfet, arrel futur, subj. present, subj. imperfet, participi, imperatiu [tu, vosaltres])
+const VDEF = [
+ ['parlar','hablar',1,'parlo parles parla parlem parleu parlen',G.ava('parl'),'parlar',G.gui('parl'),G.se('parl'),'parlat',['parla','parleu']],
+ ['menjar','comer',1,'menjo menges menja mengem mengeu mengen',G.ava('menj'),'menjar',['mengi','mengis','mengi','mengem','mengeu','mengin'],G.se('meng'),'menjat',['menja','mengeu']],
+ ['perdre','perder',1,'perdo perds perd perdem perdeu perden',G.ia('perd'),'perdr',G.gui('perd'),G.se('perd'),'perdut',['perd','perdeu']],
+ ['dormir','dormir',1,'dormo dorms dorm dormim dormiu dormen',G.ia('dorm'),'dormir',['dormi','dormis','dormi','dormim','dormiu','dormin'],G.si('dorm'),'dormit',['dorm','dormiu']],
+ ['llegir','leer',1,'llegeixo llegeixes llegeix llegim llegiu llegeixen',G.ia('lleg'),'llegir',['llegeixi','llegeixis','llegeixi','llegim','llegiu','llegeixin'],G.si('lleg'),'llegit',['llegeix','llegiu']],
+ ['servir','servir',1,'serveixo serveixes serveix servim serviu serveixen',G.ia('serv'),'servir',['serveixi','serveixis','serveixi','servim','serviu','serveixin'],G.si('serv'),'servit',['serveix','serviu']],
+ ['obrir','abrir',1,'obro obres obre obrim obriu obren',G.ia('obr'),'obrir',['obri','obris','obri','obrim','obriu','obrin'],G.si('obr'),'obert',['obre','obriu']],
+ ['ser','ser',1,'soc ets és som sou són',['era','eres','era','érem','éreu','eren'],'ser',G.gui('sigu'),['fos','fossis','fos','fóssim','fóssiu','fossin'],'estat|sigut',['sigues','sigueu']],
+ ['estar','estar',1,'estic estàs està estem esteu estan',G.ava('est'),'estar',G.gui('estigu'),G.se('estigu'),'estat',['estigues','estigueu']],
+ ['haver','haber',1,'he has ha hem heu han',G.ia('hav'),'haur',['hagi','hagis','hagi','hàgim','hàgiu','hagin'],G.se('hagu'),'hagut',null],
+ ['fer','hacer',1,'faig fas fa fem feu fan',G.eia('f'),'far',['faci','facis','faci','fem','feu','facin'],['fes','fessis','fes','féssim','féssiu','fessin'],'fet',['fes','feu']],
+ ['anar','ir',1,'vaig vas va anem aneu van',G.ava('an'),'anir',['vagi','vagis','vagi','anem','aneu','vagin'],G.se('an'),'anat',['vés','aneu']],
+ ['dir','decir',1,'dic dius diu diem dieu diuen',G.eia('d'),'dir',G.gui('digu'),G.se('digu'),'dit',['digues','digueu']],
+ ['veure','ver',1,'veig veus veu veiem veieu veuen',G.eia('v'),'veur',G.gui('veg'),G.se('vei'),'vist',['veges','vegeu']],
+ ['venir','venir',1,'vinc vens ve venim veniu venen',G.ia('ven'),'vindr',G.gui('vingu'),G.se('vingu'),'vingut',['vine','veniu']],
+ ['tenir','tener',1,'tinc tens té tenim teniu tenen',G.ia('ten'),'tindr',G.gui('tingu'),G.se('tingu'),'tingut',['tingues|té','tingueu|teniu']],
+ ['poder','poder',1,'puc pots pot podem podeu poden',G.ia('pod'),'podr',G.gui('pugu'),G.se('pogu'),'pogut',null],
+ ['voler','querer',1,'vull vols vol volem voleu volen',G.ia('vol'),'voldr',G.gui('vulgu'),G.se('volgu'),'volgut',['vulgues','vulgueu']],
+ ['saber','saber',1,'sé saps sap sabem sabeu saben',G.ia('sab'),'sabr',['sàpiga','sàpigues','sàpiga','sapiguem','sapigueu','sàpiguen'],G.se('sab'),'sabut',['sàpigues','sapigueu']],
+ ['viure','vivir',2,'visc vius viu vivim viviu viuen',G.ia('viv'),'viur',G.gui('visqu'),G.se('visqu'),'viscut',['viu','viviu']],
+ ['escriure','escribir',2,'escric escrius escriu escrivim escriviu escriuen',G.ia('escriv'),'escriur',G.gui('escrigu'),G.si('escriv'),'escrit',['escriu','escriviu']],
+ ['conèixer','conocer',2,'conec coneixes coneix coneixem coneixeu coneixen',G.ia('coneix'),'coneixer',G.gui('conegu'),G.se('conegu'),'conegut',['coneix','coneixeu']],
+ ['beure','beber',2,'bec beus beu bevem beveu beuen',G.ia('bev'),'beur',G.gui('begu'),G.se('begu'),'begut',['beu','beveu']],
+ ['caure','caer',2,'caic caus cau caiem caieu cauen',G.eia('qu'),'caur',G.gui('caigu'),G.se('caigu'),'caigut',['cau','caieu']],
+ ['creure','creer',2,'crec creus creu creiem creieu creuen',G.eia('cr'),'creur',G.gui('cregu'),G.se('cregu'),'cregut',['creu','creieu']],
+ ['dur','llevar',2,'duc duus|dus duu|du duem dueu duen',G.uia('d'),'dur',G.gui('dugu'),G.se('dugu'),'dut',['duu|du','dueu']],
+ ['prendre','tomar',2,'prenc prens pren prenem preneu prenen',G.ia('pren'),'prendr',G.gui('prengu'),G.se('prengu'),'pres',['pren','preneu']],
+ ['entendre','entender',2,'entenc entens entén entenem enteneu entenen',G.ia('enten'),'entendr',G.gui('entengu'),G.se('entengu'),'entès',['entén','enteneu']],
+ ['treure','sacar',2,'trec treus treu traiem traieu treuen',G.eia('tr'),'treur',['tregui','treguis','tregui','traguem','tragueu','treguin'],G.se('tragu'),'tret',['treu','traieu']],
+ ['moure','mover',2,'moc mous mou movem moveu mouen',G.ia('mov'),'mour',G.gui('mogu'),G.se('mogu'),'mogut',['mou','moveu']],
+ ['córrer','correr',2,'corro corres corre correm correu corren',G.ia('corr'),'correr',G.gui('corr'),G.se('corregu'),'corregut',['corre','correu']],
+ ['sortir','salir',2,'surto surts surt sortim sortiu surten',G.ia('sort'),'sortir',['surti','surtis','surti','sortim','sortiu','surtin'],G.si('sort'),'sortit',['surt','sortiu']],
+ ['seure','sentarse',2,'sec seus seu seiem seieu seuen',G.eia('s'),'seur',G.gui('segu'),G.se('segu'),'segut',['seu','seieu']],
+ ['riure','reír',2,'ric rius riu riem rieu riuen',G.eia('r'),'riur',G.gui('rigu'),G.se('rigu'),'rigut',['riu','rieu']],
+ ['néixer','nacer',2,'neixo neixes neix naixem naixeu neixen',G.ia('naix'),'naixer',['neixi','neixis','neixi','naixem','naixeu','neixin'],G.se('nasqu'),'nascut',null],
+ ['morir','morir',2,'moro mors mor morim moriu moren',G.ia('mor'),'morir',['mori','moris','mori','morim','moriu','morin'],G.si('mor'),'mort',null],
+ ['valer','valer',2,'valc vals val valem valeu valen',G.ia('val'),'valdr',G.gui('valgu'),G.se('valgu'),'valgut',null],
+];
+const AUX_PERIF = ['vaig','vas|vares','va','vam|vàrem','vau|vàreu','van|varen'];
+const AUX_HE = ['he','has','ha','hem','heu','han'];
+const AUX_HAVIA = ['havia','havies','havia','havíem','havíeu','havien'];
+const VERBS = {};
+for (const d of VDEF){
+  const [inf,gl,lvl,pres,impf,fs,subjp,subji,part,imp] = d;
+  const t = {
+    pres: pres.split(' '), impf, subjp, subji,
+    fut: E6(fs,['é','às','à','em','eu','an']),
+    cond: E6(fs,['ia','ies','ia','íem','íeu','ien']),
+  };
+  if (inf==='ser') t.cond = t.cond.map(x=>x); // fóra també s'accepta
+  const parts = part.split('|');
+  t.perif = AUX_PERIF.map(a=>a.split('|').map(x=>x+' '+inf).join('|'));
+  t.perfet = AUX_HE.map(a=>parts.map(p=>a+' '+p).join('|'));
+  t.plusq = AUX_HAVIA.map(a=>parts.map(p=>a+' '+p).join('|'));
+  if (imp) t.imper = [imp[0], subjp[2], subjp[3], imp[1], subjp[5]];
+  VERBS[inf] = {inf, gl, lvl, t, part};
+}
+const TENSES = {
+  pres:{n:'Present d\'indicatiu', lvl:1, tip:'Present: jo -o (parlo), però molts irregulars acaben en -c (dic, vinc, puc, tinc).'},
+  perif:{n:'Passat perifràstic', lvl:1, tip:'Perifràstic: vaig, vas, va, vam, vau, van + infinitiu (vaig anar). També vares, vàrem, vàreu, varen.'},
+  perfet:{n:'Perfet (pretèrit perfet)', lvl:1, tip:'Perfet: he, has, ha, hem, heu, han + participi. S\'usa per a accions dins d\'un temps no acabat (avui, aquest any).'},
+  fut:{n:'Futur', lvl:1, tip:'Futur: arrel + -é, -às, -à, -em, -eu, -an. Irregulars: faré, aniré, tindré, vindré, podré, voldré, sabré, hauré.'},
+  impf:{n:'Imperfet d\'indicatiu', lvl:2, tip:'Imperfet: -ar → -ava (parlava, parlàvem); -er/-ir → -ia (tenia, teníem). Irregulars: era, feia, deia, veia, queia, duia.'},
+  cond:{n:'Condicional', lvl:2, tip:'Condicional: arrel del futur + -ia, -ies, -ia, -íem, -íeu, -ien (faria, aniria, tindria).'},
+  plusq:{n:'Plusquamperfet', lvl:2, tip:'Plusquamperfet: havia, havies, havia, havíem, havíeu, havien + participi. Acció anterior a una altra del passat.'},
+  imper:{n:'Imperatiu', lvl:2, tip:'Imperatiu: tu i vosaltres tenen forma pròpia (vine, veniu); vostè, nosaltres i vostès prenen el subjuntiu (vingui, vinguem, vinguin). Negatiu: sempre subjuntiu (no vinguis!).'},
+  subjp:{n:'Present de subjuntiu', lvl:3, tip:'Subjuntiu present: -i, -is, -i, -em, -eu, -in (parli). Molts irregulars en -gui: vingui, tingui, pugui, digui, begui, conegui.'},
+  subji:{n:'Imperfet de subjuntiu', lvl:3, tip:'Subjuntiu imperfet: -és, -essis, -és, -éssim, -éssiu, -essin (parlés); 3a conj. -ís (dormís). Irregulars: fos, fes, fes, tingués, vingués, pogués, hagués.'},
+};
+const IMPER_PERS = ['tu','vostè','nosaltres','vosaltres','vostès'];
+
+// Frases: indicatiu / subjuntiu, si condicionals, contrast de passats
+// [nivell, frase amb ___, verb (persona), respostes, explicació, tema]
+const VFRASES = [
+ [2,'Quan ___ a casa, truca\'m.','arribar, tu','arribis','Quan + futur → present de subjuntiu (quan arribis).'],
+ [2,'Espero que ___ bon viatge.','tenir, vosaltres','tingueu','Esperar que (desig) + subjuntiu.'],
+ [3,'Si ___ temps, vindria amb vosaltres.','tenir, jo','tingués','Si + imperfet de subjuntiu → condicional (si tingués, vindria).'],
+ [1,'Crec que ___ una bona idea.','ser','és','Creure que (afirmatiu) + indicatiu.'],
+ [2,'No crec que ___ una bona idea.','ser','sigui','No creure que + subjuntiu.'],
+ [2,'Encara que demà ___, sortirem d\'excursió.','ploure','plogui','Encara que + fet hipotètic → subjuntiu (plogui).'],
+ [2,'Vull que ___ amb mi a la reunió.','venir, tu','vinguis','Voler que + subjuntiu (subjectes diferents).'],
+ [3,'És important que ___ la veritat.','saber, vosaltres','sapigueu','És important que + subjuntiu. Atenció: sapiguem, sapigueu sense accent.'],
+ [3,'Si ho ___, t\'ho hauria dit.','saber, jo','hagués sabut','Condició irreal en el passat: si + plusquamperfet de subjuntiu (si ho hagués sabut).'],
+ [3,'Em va demanar que l\'___ a fer la mudança.','ajudar, jo','ajudés','Passat + que + subjuntiu → imperfet de subjuntiu (em va demanar que l\'ajudés).'],
+ [2,'Busco un pis que ___ terrassa.','tenir','tingui','Antecedent desconegut (un pis qualsevol) → subjuntiu.'],
+ [1,'Tinc un pis que ___ terrassa.','tenir','té','Antecedent conegut i real → indicatiu.'],
+ [1,'Quan ___ petit, vivia a Girona.','ser, jo','era','Descripció en el passat → imperfet (era).'],
+ [1,'Ahir ___ al cinema.','anar, nosaltres','vam anar|vàrem anar','Ahir (temps acabat) → passat perifràstic.'],
+ [1,'Aquest matí ___ massa cafè.','beure, jo','he begut','Aquest matí (temps no acabat) → perfet.'],
+ [2,'Quan vam arribar a l\'estació, el tren ja ___.','sortir','havia sortit','Acció anterior a una altra del passat → plusquamperfet.'],
+ [1,'L\'any que ve ___ un viatge a Mallorca.','fer, jo','faré','Futur: faré.'],
+ [2,'___ passar-me la sal, si us plau?','poder, tu','podries','Petició cortès → condicional (podries).'],
+ [3,'M\'agradaria que ___ a sopar dissabte.','venir, vosaltres','vinguéssiu','Condicional + que → imperfet de subjuntiu.'],
+ [2,'Dubto que ho ___.','entendre, ells','entenguin','Dubtar que + subjuntiu.'],
+ [1,'És evident que ___ cansada.','estar, ella','està','És evident que (certesa) + indicatiu.'],
+ [2,'Tan bon punt ___, avisa\'m.','acabar, tu','acabis','Tan bon punt + acció futura → subjuntiu.'],
+ [1,'Mentre ___, va sonar el telèfon.','dormir, ell','dormia','Acció en curs en el passat → imperfet.'],
+ [1,'Si demà plou, no ___.','sortir, nosaltres','sortirem|sortim','Si + present → futur (o present).'],
+ [2,'Si plogués, no ___.','sortir, nosaltres','sortiríem','Si + imperfet de subjuntiu → condicional.'],
+ [2,'T\'ho explicaré a poc a poc perquè ho ___ bé.','entendre, tu','entenguis','Perquè (finalitat) + subjuntiu.'],
+ [2,'Que ___ un bon dia!','tenir, vostè','tingui','Desig amb que + subjuntiu.'],
+ [2,'No ___ soroll, que dorm el nen!','fer, tu','facis','L\'imperatiu negatiu es fa amb subjuntiu: no facis.'],
+ [2,'No ___ tan de pressa!','anar, vosaltres','aneu','Imperatiu negatiu = subjuntiu: no aneu.'],
+ [1,'___ aquí un moment!','venir, tu','vine','Imperatiu de venir (tu): vine.'],
+ [2,'___ la veritat!','dir, tu','digues','Imperatiu de dir (tu): digues.'],
+ [2,'___, si us plau.','seure, vostè','segui','Vostè → subjuntiu: segui.'],
+ [2,'No ___ sense jaqueta, que fa fred.','sortir, tu','surtis','Imperatiu negatiu: no surtis.'],
+ [3,'Demà a aquesta hora ja ___ l\'examen.','acabar, nosaltres','haurem acabat','Acció acabada abans d\'un moment futur → futur perfet.'],
+ [3,'Si m\'ho haguessis dit, t\'___.','ajudar, jo','hauria ajudat|hagués ajudat','Condicional perfet: hauria ajudat (també hagués ajudat).'],
+ [3,'Va fer com si no ___ res.','passar','passés|hagués passat','Com si + imperfet (o plusquamperfet) de subjuntiu.'],
+ [1,'Tot i que ___ cansat, vaig anar a la festa.','estar, jo','estava','Tot i que + fet real → indicatiu.'],
+ [1,'Quan ___ divuit anys, em vaig treure el carnet.','tenir, jo','tenia','Edat en el passat → imperfet.'],
+ [2,'No crec que ells ___ temps aquesta setmana.','tenir','tinguin','No creure que + subjuntiu.'],
+ [2,'Potser és millor que ___ abans de les vuit.','sortir, nosaltres','sortim','És millor que + subjuntiu. Sortir: que sortim (igual que el present).'],
+ [3,'Si ___ més a prop, vindria a peu.','viure, jo','visqués','Si + imperfet de subjuntiu: visqués.'],
+ [3,'Volia que ___ la porta.','obrir, tu','obrissis','Imperfet de subjuntiu de 3a conjugació: obrissis.'],
+ [3,'Ens van demanar que ___ puntuals.','ser, nosaltres','fóssim','Imperfet de subjuntiu de ser: fos, fossis, fos, fóssim, fóssiu, fossin.'],
+ [2,'Abans que ___ fosc, tornarem a casa.','fer-se','es faci','Abans que + subjuntiu: abans que es faci fosc.'],
+ [1,'La setmana passada ___ la Núria.','veure, jo','vaig veure','Temps acabat → perifràstic: vaig veure.'],
+ [2,'Quan era petita, sempre ___ llet abans d\'anar a dormir.','beure, ella','bevia','Hàbit en el passat → imperfet: bevia.'],
+ [2,'De petits, ___ a la platja cada estiu.','anar, nosaltres','anàvem','Hàbit en el passat → imperfet: anàvem.'],
+ [2,'Fins ara no ___ mai a Menorca.','ser, jo','he estat|he anat','Experiència fins al present → perfet: he estat.'],
+ [3,'Si no hagués plogut, ___ a la platja.','anar, nosaltres','hauríem anat|haguéssim anat','Condició irreal passada → condicional perfet.'],
+ [2,'Digues-li que ___ de seguida.','venir, ell','vingui','Ordre indirecta (digues-li que...) → subjuntiu.'],
+];
+// ===== PRONOMS FEBLES =====
+// ['i', nivell, tema, enunciat, respostes, explicació] o ['m', nivell, tema, enunciat, opcions, correcta, explicació]
+const PRON = [
+ ['i',1,'cd','Compro <b>el diari</b> cada dia. → ___ compro cada dia.','el','CD masculí singular determinat → <i>el</i> (davant de consonant).'],
+ ['i',1,'cd','Llegeixo <b>la revista</b>. → ___ llegeixo.','la','CD femení singular determinat → <i>la</i>.'],
+ ['i',1,'cd','Escolto <b>els discos</b>. → ___ escolto.','els','CD masculí plural → <i>els</i>.'],
+ ['i',1,'cd','Rento <b>les tasses</b>. → ___ rento.','les','CD femení plural → <i>les</i>.'],
+ ['i',1,'cd','Obro <b>la porta</b>. → ___obro.','l\'','Davant de vocal, <i>el</i> i <i>la</i> s\'apostrofen: <i>l\'obro</i>.'],
+ ['i',1,'cd','Estimo <b>el meu gos</b>. → ___estimo.','l\'','Davant de vocal: <i>l\'estimo</i>.'],
+ ['i',1,'cd','He vist <b>la Maria</b>. → ___he vista.','l\'','<i>L\'he vista</i>: amb CD femení davant del perfet, el participi pot concordar (vista).'],
+ ['i',1,'cd','Sé <b>que vindràs</b>. → ___ sé.','ho','CD neutre (una frase, això, allò) → <i>ho</i>.'],
+ ['i',1,'cd','No entenc <b>això</b>. → No ___ entenc.','ho','<i>Això</i> → <i>ho</i>.'],
+ ['i',1,'cd','La Laia és <b>metgessa</b>. → La Laia ___ és.','ho','Atribut amb ser, estar i semblar → <i>ho</i>.'],
+ ['i',1,'cd','Està <b>cansat</b>. → ___ està.','ho','Atribut → <i>ho</i>.'],
+ ['i',2,'cd','Semblen <b>contents</b>. → ___ semblen.','ho','Atribut → <i>ho</i>, encara que sigui plural.'],
+ ['m',2,'cd','Quina és correcta? (CD: <b>la Joana</b>, en passat)',['L\'he vista aquest matí.','La he vist aquest matí.','Li he vist aquest matí.'],0,'<i>La Joana</i> és CD → <i>l\'</i> davant de vocal. <i>Li</i> és CI, no CD.'],
+ ['m',1,'cd','Quina és correcta?',['Lo vaig veure ahir.','El vaig veure ahir.','Li vaig veure ahir.'],1,'<i>Lo</i> no és normatiu davant del verb: <i>el vaig veure</i>.'],
+ // en / hi
+ ['i',1,'enhi','Vull comprar <b>pa</b>. → ___ vull comprar.','en','CD indeterminat (sense article) → <i>en</i>.'],
+ ['i',1,'enhi','Parlem <b>de política</b>. → ___ parlem.','en','Complement introduït per <i>de</i> → <i>en</i>.'],
+ ['i',1,'enhi','Vinc <b>de la platja</b>. → ___ vinc.','en','Lloc d\'origen (de...) → <i>en</i>.'],
+ ['i',1,'enhi','Tinc <b>tres germans</b>. → ___ tinc tres.','en','Quantitat: el nom se substitueix per <i>en</i> i el numeral es manté.'],
+ ['i',2,'enhi','Tinc <b>molts amics</b>. → ___ tinc molts.','en','Quantitat amb <i>molts</i>: <i>en tinc molts</i>.'],
+ ['i',1,'enhi','Vaig <b>a Barcelona</b>. → ___ vaig.','hi','Lloc (a, en, dins...) → <i>hi</i>.'],
+ ['i',1,'enhi','Penso <b>en les vacances</b>. → ___ penso.','hi','Complement de règim amb <i>en</i> (o <i>a</i>, <i>amb</i>) → <i>hi</i>.'],
+ ['i',2,'enhi','No he estat mai <b>a Menorca</b>. → No ___ he estat mai.','hi','Lloc → <i>hi</i>.'],
+ ['i',2,'enhi','Hi ha <b>tres cadires</b>. → ___ ha tres.','n\'hi','<i>Haver-hi</i> + quantitat: <i>n\'hi ha tres</i>.'],
+ ['i',2,'enhi','Han sortit <b>del cine</b> fa poc. → ___ han sortit fa poc.','n\'','<i>En</i> davant de vocal → <i>n\'</i>.'],
+ ['i',3,'enhi','Tinc dues bicicletes <b>noves</b>. → ___ tinc dues de noves.','en','Partitiu amb adjectiu: <i>en tinc dues de noves</i> (cal la <i>de</i> davant l\'adjectiu).'],
+ ['i',3,'enhi','Vull una camisa <b>vermella</b>. → ___ vull una de vermella.','en','Partitiu: <i>en vull una de vermella</i>.'],
+ ['i',2,'enhi','Confio <b>en tu</b>. → ___ confio.','hi','<i>Confiar en</i> → <i>hi</i> (amb persones també és correcte).'],
+ ['m',2,'enhi','Has portat les galetes? — Sí, ___ he portat.',['les','n\'','hi'],0,'Galetes concretes (determinat) → <i>les</i>. Si fos "galetes" sense article, seria <i>n\'he portat</i>.'],
+ ['m',2,'enhi','Has portat galetes? — Sí, ___ he portat.',['les','n\'','hi'],1,'Sense article (indeterminat) → <i>en</i>: <i>n\'he portat</i>.'],
+ // CI
+ ['i',1,'ci','Telefono <b>a la Marta</b>. → ___ telefono.','li','CI singular → <i>li</i>.'],
+ ['i',1,'ci','Escric <b>als meus avis</b>. → ___ escric.','els','CI plural → <i>els</i>.'],
+ ['i',1,'ci','Agrada <b>a nosaltres</b>. → ___ agrada.','ens','Primera persona plural → <i>ens</i>.'],
+ ['i',1,'ci','He trucat <b>a vosaltres</b>. → ___ he trucat.','us','Segona persona plural → <i>us</i>.'],
+ ['i',1,'ci','Espero <b>a tu</b>. → ___espero.','t\'','<i>Et</i> davant de vocal → <i>t\'</i>: <i>t\'espero</i>.'],
+ ['i',2,'ci','He dit <b>a ell</b> que vingui. → ___ he dit que vingui.','li','CI → <i>li</i>.'],
+ ['i',2,'ci','Han regalat flors <b>a les professores</b>. → ___ han regalat flors.','els','CI plural (masculí o femení) → <i>els</i>. Mai <i>les</i> com a CI!'],
+ ['m',2,'ci','Quina és correcta? (CI: <b>a les nenes</b>)',['Les he dit que vinguin.','Els he dit que vinguin.','Li he dit que vinguin.'],1,'El CI plural és sempre <i>els</i>, també en femení.'],
+ ['m',1,'ci','"Aquesta pel·lícula ___ agrada molt" (a mi)',['em','me','m\''],2,'<i>Agrada</i> comença per vocal → <i>em</i> s\'apostrofa: <i>m\'agrada</i>.'],
+ // combinacions
+ ['i',3,'combi','Dono <b>el llibre a la Maria</b>. → ___ dono.','l\'hi','CD <i>el</i> + CI <i>li</i> → <i>l\'hi</i>.'],
+ ['i',3,'combi','Dono <b>la carta al Pere</b>. → ___ dono.','la hi','CD <i>la</i> + CI <i>li</i> → <i>la hi</i>.'],
+ ['i',3,'combi','Dono <b>els llibres a la Maria</b>. → ___ dono.','els hi','CD <i>els</i> + CI <i>li</i> → <i>els hi</i>.'],
+ ['i',3,'combi','Dono <b>les cartes al Pere</b>. → ___ dono.','les hi','CD <i>les</i> + CI <i>li</i> → <i>les hi</i>.'],
+ ['i',3,'combi','Dono <b>pomes a la Maria</b>. → ___ dono.','n\'hi','CD indeterminat <i>en</i> + CI <i>li</i> → <i>n\'hi</i>.'],
+ ['i',3,'combi','Dono <b>el llibre als nens</b>. → ___ dono.','els el','CI <i>els</i> + CD <i>el</i> → <i>els el</i> (normatiu). <i>Els hi</i> és col·loquial.'],
+ ['i',2,'combi','Dic <b>això a la Maria</b>. → ___ dic.','li ho','CI <i>li</i> + CD neutre <i>ho</i> → <i>li ho</i>.'],
+ ['i',2,'combi','<b>Em</b> dones <b>el llibre</b>? → ___ dones?','me\'l','<i>Em</i> + <i>el</i> → <i>me\'l</i>.'],
+ ['i',2,'combi','<b>Et</b> porto <b>les claus</b>. → ___ porto.','te les','<i>Et</i> + <i>les</i> → <i>te les</i>.'],
+ ['i',2,'combi','<b>Ens</b> expliques <b>la història</b>? → ___ expliques?','ens la','<i>Ens</i> + <i>la</i> → <i>ens la</i>.'],
+ ['i',2,'combi','<b>Us</b> envio <b>els documents</b>. → ___ envio.','us els','<i>Us</i> + <i>els</i> → <i>us els</i>.'],
+ ['i',2,'combi','<b>Em</b> dones <b>pa</b>? → ___ dones?','me\'n','<i>Em</i> + <i>en</i> → <i>me\'n</i>.'],
+ ['i',3,'combi','Vaig portar <b>el nen a l\'escola</b>. → ___ vaig portar.','l\'hi','CD <i>el</i> + lloc <i>hi</i> → <i>l\'hi</i>.'],
+ ['i',3,'combi','Vaig trobar <b>la Joana al mercat</b>. → ___ vaig trobar.','la hi','CD <i>la</i> + lloc <i>hi</i> → <i>la hi</i>.'],
+ ['i',3,'combi','<b>Et</b> dic <b>això</b>. → ___ dic.','t\'ho','<i>Et</i> + <i>ho</i> → <i>t\'ho</i>.'],
+ ['i',3,'combi','<b>Us</b> porto <b>vi</b>. → ___ porto.','us en','<i>Us</i> + <i>en</i> davant de consonant → <i>us en</i>.'],
+ ['m',3,'combi','Has explicat la notícia a la teva germana? — Sí, ___ he explicada.',['la hi','li la','l\'hi'],0,'CD <i>la</i> + CI <i>li</i> → <i>la hi</i>. L\'ordre és CD + <i>hi</i>.'],
+ // enclisi
+ ['i',1,'encl','Has de fer <b>els deures</b>. → Has de ___.','fer-los','Darrere d\'infinitiu acabat en consonant: <i>-los</i>.'],
+ ['i',1,'encl','Estic llegint <b>el llibre</b>. → Estic ___.','llegint-lo','Darrere de gerundi: <i>llegint-lo</i>.'],
+ ['i',1,'encl','Vull veure <b>les fotos</b>. → Vull ___.','veure-les','Darrere de vocal, <i>les</i> manté la forma: <i>veure-les</i>.'],
+ ['i',1,'encl','Pots portar <b>el cotxe</b>. → Pots ___.','portar-lo','<i>Portar-lo</i>.'],
+ ['i',1,'encl','Compra <b>el pa</b>! → ___!','compra\'l','Darrere de vocal, <i>el</i> → <i>\'l</i>: <i>compra\'l</i>.'],
+ ['i',1,'encl','Truca <b>a la teva mare</b>! → ___!','truca-li','<i>Truca-li</i>.'],
+ ['i',1,'encl','Escriu <b>als clients</b>! → ___!','escriu-los','Darrere de <i>-u</i> (semivocal), <i>els</i> → <i>-los</i>: <i>escriu-los</i>.'],
+ ['i',2,'encl','Pensa <b>en el futur</b>! → ___!','pensa-hi','<i>Hi</i> darrere del verb: <i>pensa-hi</i>.'],
+ ['i',2,'encl','Parla <b>de l\'examen</b>! → ___!','parla\'n','Darrere de vocal, <i>en</i> → <i>\'n</i>: <i>parla\'n</i>.'],
+ ['i',2,'encl','Compra <b>pomes</b>! → ___!','compra\'n','<i>Compra\'n</i>.'],
+ ['i',2,'encl','Vull menjar <b>pa</b>. → Vull ___.','menjar-ne','Darrere de consonant, <i>en</i> → <i>-ne</i>: <i>menjar-ne</i>.'],
+ ['i',2,'encl','Mira <b>la televisió</b>! → ___!','mira-la','<i>Mira-la</i>.'],
+ ['i',3,'encl','Porta <b>a mi el llibre</b>! → ___!','porta-me\'l','<i>Me</i> + <i>el</i> darrere de vocal: <i>porta-me\'l</i>.'],
+ ['i',3,'encl','Dona <b>la carta a ella</b>! → ___!','dona-la-hi','CD <i>la</i> + CI <i>li</i> → <i>-la-hi</i>.'],
+ ['i',3,'encl','Dona <b>el llibre a ell</b>! → ___!','dona-l\'hi','<i>Dona-l\'hi</i>.'],
+ ['i',3,'encl','Vull donar <b>flors a la Clara</b>. → Vull ___.','donar-n\'hi','<i>En</i> + <i>hi</i> → <i>-n\'hi</i>: <i>donar-n\'hi</i>.'],
+ ['i',3,'encl','Digues <b>això a ells</b>! → ___!','digues-los-ho','CI <i>els</i> + <i>ho</i> → <i>-los-ho</i>.'],
+ ['i',2,'encl','Explica <b>a nosaltres</b> la història! → ___ la història!','explica\'ns','<i>Ens</i> darrere de vocal → <i>\'ns</i>.'],
+ ['i',2,'encl','Esperant <b>a vosaltres</b>. → ___.','esperant-vos','<i>Us</i> darrere de consonant → <i>-vos</i>.'],
+ // pronominals
+ ['i',2,'pron','Nosaltres ___ anem ara. (anar-se\'n)','ens n\'','<i>Ens n\'anem</i>.'],
+ ['i',2,'pron','Vosaltres ___ aneu demà. (anar-se\'n)','us n\'','<i>Us n\'aneu</i>.'],
+ ['i',1,'pron','Ells ___ van a les set. (anar-se\'n)','se\'n','<i>Se\'n van</i>.'],
+ ['i',1,'pron','Jo ___ vaig a casa. (anar-se\'n)','me\'n','<i>Me\'n vaig</i>.'],
+ ['i',2,'pron','Em recordo <b>de la festa</b>. → ___ recordo.','me\'n','<i>Recordar-se de</i> → <i>me\'n recordo</i>.'],
+ ['i',2,'pron','Ens hem adonat <b>de l\'error</b>. → ___ hem adonat.','ens n\'','<i>Adonar-se de</i> → <i>ens n\'hem adonat</i>.'],
+ ['i',2,'pron','Te\'n vas? → Sí, ___ vaig. (anar-se\'n)','me\'n','<i>Me\'n vaig</i>.'],
+ ['i',3,'pron','Vés-te\'n! (vosaltres) → ___!','aneu-vos-en','Imperatiu de vosaltres: <i>aneu-vos-en</i>.'],
+ ['i',3,'pron','Me\'n vaig (infinitiu amb poder): Puc ___?','anar-me\'n','<i>Anar-me\'n</i>.'],
+ ['m',2,'pron','Quina és correcta?',['Me\'n recordo de tu.','Em recordo de tu.','Me recordo de tu.'],1,'Si el complement hi és (<i>de tu</i>), no es duplica amb <i>en</i>: <i>em recordo de tu</i>.'],
+ ['m',2,'pron','Quina és correcta?',['Se\'n ha anat.','S\'ha n\'anat.','Se n\'ha anat.'],2,'<i>Se</i> + <i>en</i> davant de vocal → <i>se n\'ha anat</i>.'],
+ ['m',2,'pron','Quina és correcta?',['Ens hem d\'anar.','Ens n\'hem d\'anar.','Hem d\'anar-nos.'],1,'<i>Anar-se\'n</i>: <i>ens n\'hem d\'anar</i> o <i>hem d\'anar-nos-en</i>.'],
+];
+
+// ===== PREPOSICIONS =====
+const PREP = [
+ ['m',1,'aen','Vaig ___ Barcelona dilluns.',['a','en','amb'],0,'Destinació amb verbs de moviment → <i>a</i>.'],
+ ['m',1,'aen','Visc ___ Girona.',['a','en','amb'],0,'Davant de topònims → <i>a</i>.'],
+ ['m',1,'aen','Ens veiem ___ les cinc.',['a','en','per'],0,'Hora → <i>a les cinc</i>.'],
+ ['m',1,'aen','Hi anirem ___ peu.',['a','en','amb'],0,'<i>A peu</i>.'],
+ ['m',1,'aen','Treballo ___ un amic.',['a','en','amb'],2,'Companyia → <i>amb</i>.'],
+ ['m',2,'aen','___ sortir de casa, vaig veure la Maria.',['Al','En','Amb'],1,'<i>En</i> + infinitiu = quan. <i>Al sortir</i> és un castellanisme.'],
+ ['m',2,'aen','___ cas de pluja, el concert s\'ajornarà.',['A','En','Per'],1,'<i>En cas de</i>.'],
+ ['m',2,'aen','Sempre penso ___ tu.',['a','en','de'],1,'<i>Pensar en</i>.'],
+ ['m',2,'aen','Viu ___ aquell edifici.',['a','en','les dues són correctes'],2,'Davant de demostratius (aquest, aquell), indefinits i numerals s\'accepten <i>a</i> i <i>en</i>.'],
+ ['m',1,'aen','Estic ___ casa.',['a','en','dins'],0,'<i>A casa</i>.'],
+ ['m',1,'perpera','Aquest regal és ___ la Marta.',['per','per a'],1,'Destinatari → <i>per a</i>.'],
+ ['m',1,'perpera','Passarem ___ Lleida.',['per','per a'],0,'Lloc de pas → <i>per</i>.'],
+ ['m',1,'perpera','Ho ha fet ___ por.',['per','per a'],0,'Causa → <i>per</i>.'],
+ ['m',1,'perpera','Tinc una carta ___ tu.',['per','per a'],1,'Destinatari → <i>per a</i>.'],
+ ['m',2,'perpera','Ho tindré enllestit ___ dilluns.',['per','per a'],1,'Termini → <i>per a</i>.'],
+ ['m',1,'perpera','M\'ho van enviar ___ correu.',['per','per a'],0,'Mitjà → <i>per</i>.'],
+ ['m',2,'perpera','Aquestes pastilles són ___ el mal de cap.',['per','per a'],1,'Finalitat davant de nom → <i>per a</i>.'],
+ ['m',1,'perpera','Gràcies ___ tot.',['per','per a'],0,'Causa → <i>per</i>.'],
+ ['m',2,'perpera','Ho ha fet ___ ajudar-nos.',['per','per a','les dues són correctes'],2,'Davant d\'infinitiu amb valor de finalitat, la normativa accepta <i>per</i> i <i>per a</i>.'],
+ ['m',2,'caiguda','Estic segur ___ que vindrà.',['de','(res)'],1,'Les preposicions àtones (a, en, de, amb) cauen davant de <i>que</i>: <i>estic segur que</i>.'],
+ ['m',2,'caiguda','Pensa ___ que demà hi ha examen.',['en','(res)'],1,'Caiguda davant de <i>que</i>: <i>pensa que...</i>'],
+ ['m',2,'caiguda','M\'alegro ___ que hagis vingut.',['de','(res)'],1,'Caiguda davant de <i>que</i>: <i>m\'alegro que</i>.'],
+ ['m',2,'caiguda','Em vaig adonar ___ que plovia.',['de','(res)'],1,'Caiguda davant de <i>que</i>.'],
+ ['m',1,'caiguda','Em vaig adonar ___ l\'error.',['de','(res)'],0,'Davant de nom es manté: <i>adonar-se de</i>.'],
+ ['m',1,'caiguda','Tinc ganes ___ sortir.',['de','(res)'],0,'Davant d\'infinitiu, <i>de</i> es manté: <i>tinc ganes de sortir</i>.'],
+ ['m',2,'caiguda','Confio ___ que tot anirà bé.',['en','(res)'],1,'Caiguda davant de <i>que</i>: <i>confio que</i>.'],
+ ['m',3,'caiguda','Insisteix ___ pagar ell.',['en','a','(res)'],1,'<i>En</i> canvia a <i>a</i> davant d\'infinitiu: <i>insistir a pagar</i>.'],
+ ['m',3,'caiguda','Pensa ___ apagar el llum!',['en','a','(res)'],1,'<i>Pensar a</i> + infinitiu (recordar-se de fer).'],
+ ['m',3,'caiguda','Està interessat ___ aprendre xinès.',['en','a','(res)'],1,'<i>Interessat en</i> → <i>interessat a</i> + infinitiu.'],
+ ['m',3,'caiguda','Es va entestar ___ acabar-ho avui.',['en','a','(res)'],1,'<i>Entestar-se en</i> → <i>a</i> + infinitiu.'],
+ ['m',2,'regim','Ha començat ___ ploure.',['a','de','(res)'],0,'<i>Començar a</i>.'],
+ ['m',2,'regim','Hem acabat ___ menjar.',['a','de','(res)'],1,'<i>Acabar de</i>.'],
+ ['m',2,'regim','Vaig deixar ___ fumar fa anys.',['a','de','(res)'],1,'<i>Deixar de</i>.'],
+ ['m',2,'regim','Tornaré ___ intentar-ho.',['a','de','(res)'],0,'<i>Tornar a</i> (repetició).'],
+ ['m',1,'regim','Aprenc ___ nedar.',['a','de','(res)'],0,'<i>Aprendre a</i>.'],
+ ['m',2,'regim','M\'he oblidat ___ trucar-te.',['a','de','(res)'],1,'<i>Oblidar-se de</i>.'],
+ ['m',2,'regim','Ens va convidar ___ sopar.',['a','de','(res)'],0,'<i>Convidar a</i>.'],
+ ['m',2,'regim','Tracta ___ entendre-ho.',['a','de','(res)'],1,'<i>Tractar de</i> (intentar).'],
+ ['m',2,'regim','Depèn ___ tu.',['a','de','en'],1,'<i>Dependre de</i>.'],
+ ['m',2,'regim','S\'ha casat ___ un noi de Reus.',['a','amb','en'],1,'<i>Casar-se amb</i>.'],
+ ['m',2,'regim','Somio ___ un viatge al Japó.',['a','amb','en'],1,'<i>Somiar amb</i> (o <i>somiar</i> + CD).'],
+ ['m',2,'regim','Em fixo ___ els detalls.',['a','amb','en'],2,'<i>Fixar-se en</i>.'],
+ ['m',1,'contr','Vaig ___ mercat. (a + el)',['a el','al','a l\''],1,'<i>A + el</i> → <i>al</i>.'],
+ ['m',1,'contr','Vinc ___ Pirineus. (de + els)',['de els','dels','d\'els'],1,'<i>De + els</i> → <i>dels</i>.'],
+ ['m',1,'contr','Passa ___ carrer Major. (per + el)',['per el','pel','per l\''],1,'<i>Per + el</i> → <i>pel</i>.'],
+ ['m',1,'contr','Ho dono ___ nens. (a + els)',['a els','als','as'],1,'<i>A + els</i> → <i>als</i>.'],
+ ['m',2,'contr','Vaig ___ hospital. (a + el)',['al','a l\'','a el'],1,'Davant de vocal o <i>h</i>, no hi ha contracció: <i>a l\'hospital</i>.'],
+ ['m',2,'contr','Hem caminat ___ riu. (fins a + el)',['fins el','fins al','fins a el'],1,'<i>Fins a + el</i> → <i>fins al</i>.'],
+ ['m',2,'contr','Sopem ___ Pere. (a casa de + el)',['a cal','a ca el','a casa el'],0,'<i>Ca + el</i> → <i>cal</i>: <i>a cal Pere</i>.'],
+ ['m',2,'barb','Quina és correcta?',['A nivell de salut, tot bé.','Pel que fa a la salut, tot bé.'],1,'<i>A nivell de</i> (en sentit figurat) és un calc: <i>pel que fa a</i>, <i>quant a</i>.'],
+ ['m',2,'barb','Quina és correcta?',['En base a les dades...','A partir de les dades...'],1,'<i>En base a</i> és un calc: <i>a partir de</i>, <i>segons</i>, <i>d\'acord amb</i>.'],
+ ['m',1,'barb','Quina és correcta?',['Desde ahir...','Des d\'ahir...'],1,'<i>Des de</i> (dues paraules).'],
+ ['m',2,'barb','Quina és correcta?',['Tinc que marxar.','He de marxar.'],1,'<i>Tenir que</i> és castellanisme: <i>haver de</i>.'],
+ ['m',2,'barb','Quina és correcta?',['Sota el meu punt de vista...','Des del meu punt de vista...'],1,'<i>Des del meu punt de vista</i>.'],
+];
+
+// ===== ACCENTS =====
+const ACC_WORDS = `cafè francès anglès interès pagès també només perquè això allò aquí allà després sofà país veí raó cançó camió avió ningú algú química matemàtiques història telèfon òpera àvia àlbum ràpid fàcil difícil útil exàmens examen jove joves Àfrica Amèrica Mèxic Japó Itàlia França Bèlgica Àsia París préssec pèssim església línia sèrie ciència àrea mòbil pròxim cèntim mínim màxim síl·laba plàtan préstec rellotge dòlar emoció emocions acció accions nació interessos conèixer néixer créixer ràdio vídeo públic època cèl·lula paràgraf telèfons pingüí qüestió veïna raïm països lingüística aigües Lluïsa traduït agraïm heroïna oïda reunió egoisme Lluís policia família farmàcia Barcelona València Girona comú fórmula conté manté entén aprèn depèn comprèn cinquè sisè desè vostè vostès període parèntesi anàlisi crisi càmera pròleg diàleg catàleg música càrrec ordinador pel·lícula col·lecció Perpinyà Castelló Montjuïc francesos anglesa dimarts dijous metge seixanta`.split(/\s+/);
+const ACC_DIAC = [
+ ['Ell ___ dues germanes.',['té','te'],0,'<i>Té</i> (verb tenir) porta diacrític; <i>te</i> és la beguda o el pronom.'],
+ ['Vols un ___ verd?',['té','te'],1,'<i>Te</i> (beguda) no porta accent.'],
+ ['Ho has fet molt ___.',['bé','be'],0,'<i>Bé</i> (adverbi) porta diacrític; <i>be</i> és l\'animal.'],
+ ['Ell ___ metge.',['és','es'],0,'<i>És</i> (verb ser) porta diacrític.'],
+ ['___ diu Joan.',['És','Es'],1,'<i>Es</i> (pronom) no porta accent.'],
+ ['Vull ___ pa.',['més','mes'],0,'<i>Més</i> (quantitat) porta diacrític; <i>mes</i> és el període de temps.'],
+ ['El ___ de maig.',['més','mes'],1,'<i>Mes</i> (de l\'any) no porta accent.'],
+ ['Tinc la ___ dreta adormida.',['mà','ma'],0,'<i>Mà</i> (part del cos) porta diacrític.'],
+ ['El ___ és gran.',['món','mon'],0,'<i>Món</i> (planeta) porta diacrític.'],
+ ['Hi ha un ___ a la sopa!',['pèl','pel'],0,'<i>Pèl</i> (cabell) porta diacrític; <i>pel</i> és per + el.'],
+ ['Passem ___ carrer Major.',['pèl','pel'],1,'<i>Pel</i> = per + el.'],
+ ['___ vols per sopar?',['Què','Que'],0,'<i>Què</i> tònic (interrogatiu, darrere de preposició) porta accent.'],
+ ['Crec ___ vindrà.',['què','que'],1,'<i>Que</i> conjunció és àton.'],
+ ['No ho ___.',['sé','se'],0,'<i>Sé</i> (verb saber) porta diacrític.'],
+ ['Digues que ___!',['sí','si'],0,'<i>Sí</i> afirmatiu porta diacrític.'],
+ ['___ plou, no vindré.',['Sí','Si'],1,'<i>Si</i> condicional no porta accent.'],
+ ['El ___ de la cuina és de marbre.',['sòl','sol'],0,'<i>Sòl</i> (terra que trepitgem) porta diacrític.'],
+ ['Avui fa ___.',['sòl','sol'],1,'<i>Sol</i> (astre) no porta accent.'],
+ ['Ells ___ molt amables.',['són','son'],0,'<i>Són</i> (verb ser) porta diacrític.'],
+ ['Tinc ___, me\'n vaig a dormir.',['són','son'],1,'<i>Son</i> (ganes de dormir) no porta accent.'],
+ ['És un producte d\'___ personal.',['ús','us'],0,'<i>Ús</i> (utilització) porta diacrític.'],
+ ['___ ho dic a vosaltres.',['Ús','Us'],1,'<i>Us</i> (pronom) no porta accent.'],
+ ['Ell em ___ cinquanta euros.',['déu','deu'],1,'<i>Deu</i> (verb deure o el número) no porta accent; <i>Déu</i> sí.'],
+ ['Segons la normativa actual: "Ell ___ un regal a la mare."',['dóna','dona'],1,'Des del 2017, <i>dona</i> (verb donar) ja no porta accent.'],
+ ['Segons la normativa actual: "Jo ___ de Lleida."',['sóc','soc'],1,'Des del 2017, <i>soc</i> ja no porta accent.'],
+ ['Segons la normativa actual: "Ells ___ demà." (venir)',['vénen','venen'],1,'Des del 2017, <i>venen</i> (de venir) ja no porta accent.'],
+ ['Segons la normativa actual: "Tu ___ amb nosaltres?" (venir)',['véns','vens'],1,'Des del 2017, <i>vens</i> ja no porta accent.'],
+ ['Segons la normativa actual: "El seu ___ té tres anys." (fill del fill)',['nét','net'],1,'Des del 2017, <i>net</i> (fill del fill) ja no porta accent.'],
+];
+
+// ===== ORTOGRAFIA =====
+// [nivell, tema, enunciat, opcions, correcta, explicació]
+const ORT = [
+ [1,'bv','ha__er (verb)',['haver','haber'],0,'En català: <i>haver</i> (amb v).'],
+ [1,'bv','go__ern',['govern','gobern'],0,'<i>Govern</i>, <i>governar</i>.'],
+ [1,'bv','ca__all',['cavall','caball'],0,'<i>Cavall</i>.'],
+ [1,'bv','tre__all',['treball','trevall'],0,'<i>Treball</i>.'],
+ [2,'bv','a__ocat',['advocat','abogat'],0,'<i>Advocat</i>.'],
+ [2,'bv','escri__ia',['escrivia','escribia'],0,'<i>Escriure</i> → <i>escrivia</i> (v).'],
+ [2,'bv','be__ia',['bevia','bebia'],0,'<i>Beure</i> → <i>bevia</i> (v).'],
+ [1,'bv','mo__iment',['moviment','mobiment'],0,'<i>Moviment</i>.'],
+ [1,'bv','sa__er',['saber','saver'],0,'<i>Saber</i>.'],
+ [2,'bv','al__erg',['alberg','alverg'],0,'<i>Alberg</i>.'],
+ [2,'bv','pro__ar (intentar, tastar)',['provar','probar'],0,'<i>Provar</i> amb v.'],
+ [2,'bv','pro__able',['probable','provable'],0,'<i>Probable</i> amb b.'],
+ [1,'bv','__icicleta',['bicicleta','vicicleta'],0,'<i>Bicicleta</i>.'],
+ [2,'bv','ar__re',['arbre','arvre'],0,'<i>Arbre</i>.'],
+ [2,'bv','rebre → jo re__o',['rebo','revo'],0,'<i>Rebre</i>: rebo, reps, rep...'],
+ [1,'sz','ca__a (on vius)',['casa','cassa','caça'],0,'<i>Casa</i>: s sonora entre vocals.'],
+ [1,'sz','ca__a (anar a caçar)',['casa','cassa','caça'],2,'<i>Caça</i>.'],
+ [1,'sz','pa__ar',['passar','pasar','paçar'],0,'<i>Passar</i>: s sorda entre vocals → ss.'],
+ [2,'sz','Tinc molta pre__a!',['presa','pressa'],1,'<i>Pressa</i> (urgència); <i>presa</i> és una persona presonera o una presa d\'aigua.'],
+ [1,'sz','pla__a',['plaça','plasa','plassa'],0,'<i>Plaça</i>.'],
+ [1,'sz','comen__ar',['començar','comensar','començarr'],0,'<i>Començar</i>.'],
+ [2,'sz','jo comen__o',['començo','comenco','comenso'],0,'Davant de e, i es fa servir c: <i>comencem</i>; davant de a, o, u, ç: <i>començo</i>.'],
+ [2,'sz','nosaltres comen__em',['començem','comencem'],1,'Davant de e → c: <i>comencem</i>.'],
+ [1,'sz','pi__arra',['pissarra','pisarra'],0,'<i>Pissarra</i>.'],
+ [1,'sz','do__e (12)',['dotze','doce','dose'],0,'<i>Dotze</i>, <i>tretze</i>, <i>setze</i>: tz.'],
+ [1,'sz','on__e (11)',['onze','onse','ontze'],0,'<i>Onze</i>.'],
+ [2,'sz','organit__ar',['organitzar','organisar','organizar'],0,'Verbs en <i>-itzar</i>: organitzar, realitzar.'],
+ [2,'sz','anàli__i',['anàlisi','anàlissi','anàlizi'],0,'<i>Anàlisi</i>.'],
+ [1,'sz','di__abte',['dissabte','disabte'],0,'<i>Dissabte</i>.'],
+ [2,'sz','ca__ola',['cassola','casola'],0,'<i>Cassola</i>.'],
+ [1,'sz','profe__or',['professor','profesor'],0,'<i>Professor</i>.'],
+ [2,'sz','a__ignatura',['assignatura','asignatura'],0,'<i>Assignatura</i>.'],
+ [2,'sz','naturale__a',['naturalesa','naturaleza','naturalessa'],0,'Sufix <i>-esa</i>: naturalesa, bellesa, tristesa.'],
+ [2,'sz','sen__ill (fàcil)',['senzill','sencill'],0,'<i>Senzill</i> (amb z).'],
+ [1,'gj','me__e',['metge','meje','mege'],0,'<i>Metge</i>: tg entre vocals.'],
+ [1,'gj','pla__a (de sorra)',['platja','plaja','plaga'],0,'<i>Platja</i>.'],
+ [1,'gj','__ove',['jove','gove'],0,'<i>Jove</i>.'],
+ [1,'gj','men__ar',['menjar','mengar'],0,'<i>Menjar</i>.'],
+ [2,'gj','nosaltres men__em',['menjem','mengem'],1,'Davant de e, i → g: <i>mengem</i>.'],
+ [1,'gj','via__e',['viatge','viaje','viage'],0,'<i>Viatge</i>.'],
+ [2,'gj','via__ar',['viatjar','viatgar'],0,'Davant de a → tj: <i>viatjar</i>.'],
+ [1,'gj','__ener',['gener','jener'],0,'<i>Gener</i>.'],
+ [1,'gj','__ersei',['jersei','gersei'],0,'<i>Jersei</i>.'],
+ [2,'gj','pro__ecte',['projecte','progecte'],0,'<i>Projecte</i>.'],
+ [2,'gj','lle__eixo',['llegeixo','llejeixo'],0,'<i>Llegir</i> → <i>llegeixo</i>.'],
+ [1,'ll','inte__igent',['intel·ligent','inteligent','intelligent'],0,'<i>Intel·ligent</i> (ela geminada).'],
+ [1,'ll','co__egi',['col·legi','collegi','colegi'],0,'<i>Col·legi</i>.'],
+ [1,'ll','i__usió',['il·lusió','ilusió','illusió'],0,'<i>Il·lusió</i>.'],
+ [1,'ll','pe__ícula',['pel·lícula','pellícula','película'],0,'<i>Pel·lícula</i>.'],
+ [2,'ll','co__ecció',['col·lecció','colecció','collecció'],0,'<i>Col·lecció</i>.'],
+ [2,'ll','be__esa',['bellesa','bel·lesa','belesa'],0,'<i>Bellesa</i> (ll palatal).'],
+ [2,'ll','para__el',['paral·lel','parallel','paralel'],0,'<i>Paral·lel</i>.'],
+ [2,'ll','insta__ar',['instal·lar','instalar','installar'],0,'<i>Instal·lar</i>.'],
+ [2,'ll','exce__ent',['excel·lent','excelent','excellent'],0,'<i>Excel·lent</i>.'],
+ [1,'h','__ivern',['hivern','ivern'],0,'<i>Hivern</i>.'],
+ [1,'h','__ome',['home','ome'],0,'<i>Home</i>.'],
+ [1,'h','__ou (de gallina)',['ou','hou'],0,'<i>Ou</i>, sense h.'],
+ [2,'h','__orfe',['orfe','horfe'],0,'<i>Orfe</i>, sense h.'],
+ [2,'h','pro__ibir',['prohibir','proibir'],0,'<i>Prohibir</i>.'],
+ [1,'h','__abitació',['habitació','abitació'],0,'<i>Habitació</i>.'],
+ [2,'h','__ombra',['ombra','hombra'],0,'<i>Ombra</i>, sense h.'],
+ [2,'h','__umit',['humit','umit'],0,'<i>Humit</i>.'],
+ [2,'h','__arpa (instrument)',['arpa','harpa'],0,'<i>Arpa</i>, sense h.'],
+ [1,'apos','___ home',['l\'home','el home'],0,'Article masculí davant de vocal o h → <i>l\'</i>.'],
+ [1,'apos','___ hora',['l\'hora','la hora'],0,'<i>La</i> s\'apostrofa davant de vocal tònica: <i>l\'hora</i>.'],
+ [2,'apos','___ universitat',['l\'universitat','la universitat'],1,'<i>La</i> no s\'apostrofa davant de <i>i</i>, <i>u</i> àtones: <i>la universitat</i>.'],
+ [2,'apos','___ història',['l\'història','la història'],1,'<i>His-</i> és àton: <i>la història</i>.'],
+ [2,'apos','___ iogurt',['l\'iogurt','el iogurt'],1,'Davant de <i>i</i> semivocal, no s\'apostrofa: <i>el iogurt</i>.'],
+ [3,'apos','___ anormalitat',['l\'anormalitat','la anormalitat'],1,'Davant de la <i>a-</i> negativa, no s\'apostrofa: <i>la anormalitat</i>.'],
+ [2,'apos','___ Isabel',['l\'Isabel','la Isabel'],1,'<i>I</i> àtona: <i>la Isabel</i>.'],
+ [1,'apos','___ Anna',['l\'Anna','la Anna'],0,'<i>L\'Anna</i>.'],
+ [2,'apos','___ una (hora)',['l\'una','la una'],1,'Davant de <i>una</i> (hora, número) no s\'apostrofa: <i>la una</i>.'],
+ [1,'apos','Un jersei ___ hivern',['de hivern','d\'hivern'],1,'<i>De</i> s\'apostrofa davant de vocal o h: <i>d\'hivern</i>.'],
+ [2,'apos','___ onze (número)',['l\'onze','el onze'],0,'<i>L\'onze</i>: el numeral s\'apostrofa.'],
+ [2,'guio','Quina és correcta?',['abans d\'ahir','abans-d\'ahir'],1,'<i>Abans-d\'ahir</i> porta guionets.'],
+ [2,'guio','Quina és correcta?',['nord-americà','nordamericà'],0,'Compostos de punts cardinals: <i>nord-americà</i>, <i>sud-africà</i>.'],
+ [2,'guio','Quina és correcta?',['ex-ministre','exministre'],1,'Els prefixos s\'escriuen junts: <i>exministre</i>.'],
+ [2,'guio','Quina és correcta?',['contraatac','contra-atac'],0,'Els prefixos s\'escriuen junts: <i>contraatac</i>.'],
+ [2,'guio','Quina és correcta?',['para-sol','parasol'],0,'Compostos amb verb + nom que comença per s, r, x: <i>para-sol</i>, <i>gira-sol</i>.'],
+ [2,'barb','"bueno" → en català...',['bé / doncs','bo'],0,'<i>Bueno</i> és castellanisme: <i>bé</i>, <i>doncs</i>, <i>d\'acord</i>.'],
+ [1,'barb','"vale" → en català...',['val','d\'acord'],1,'<i>D\'acord</i>.'],
+ [1,'barb','"pues" → en català...',['doncs','pos'],0,'<i>Doncs</i>.'],
+ [2,'barb','"sello" (de carta) → en català...',['segell','sello'],0,'<i>Segell</i>.'],
+ [2,'barb','"acera" → en català...',['acera','vorera'],1,'<i>Vorera</i>.'],
+ [2,'barb','"basura" → en català...',['escombraries','basura'],0,'<i>Escombraries</i>.'],
+ [2,'barb','"enterar-se" → en català...',['assabentar-se','enterar-se'],0,'<i>Assabentar-se</i>.'],
+ [2,'barb','"despedir-se" → en català...',['acomiadar-se','despedir-se'],0,'<i>Acomiadar-se</i>.'],
+ [2,'barb','"vaso" → en català...',['got','vas'],0,'<i>Got</i>. (Un <i>vas</i> és un recipient en general o un conducte sanguini.)'],
+ [3,'barb','"recados" → en català...',['encàrrecs','recados'],0,'<i>Encàrrecs</i>.'],
+ [2,'barb','"hasta" → en català...',['fins','asta'],0,'<i>Fins</i>, <i>fins a</i>.'],
+ [3,'barb','"apretar" → en català...',['estrènyer','apretar'],0,'<i>Estrènyer</i>, <i>prémer</i>.'],
+ [3,'barb','"tonteria" → en català...',['ximpleria','tonteria'],0,'<i>Ximpleria</i>, <i>bajanada</i>.'],
+];
+
+// ===== BÀSICS (vocabulari que s'oblida) =====
+const BAS_STATIC = [
+ ['m',1,'dates','Quin dia va després de dimecres?',['dijous','divendres','dimarts'],0,'dilluns, dimarts, dimecres, dijous, divendres, dissabte, diumenge.'],
+ ['m',1,'dates','Quin dia va abans de diumenge?',['dissabte','divendres','dilluns'],0,'<i>Dissabte</i> (amb ss).'],
+ ['i',1,'dates','Escriu el mes número 10.','octubre','gener, febrer, març, abril, maig, juny, juliol, agost, setembre, octubre, novembre, desembre.'],
+ ['i',1,'dates','Escriu el mes número 6.','juny','<i>Juny</i> (6) i <i>juliol</i> (7).'],
+ ['i',1,'dates','Escriu el mes número 7.','juliol','<i>Juliol</i>.'],
+ ['i',1,'dates','Escriu el mes número 3.','març','<i>Març</i> (amb ç).'],
+ ['i',1,'dates','Escriu el mes número 2.','febrer','<i>Febrer</i>.'],
+ ['i',1,'dates','Escriu el mes número 5.','maig','<i>Maig</i>.'],
+ ['i',1,'dates','Escriu el mes número 9.','setembre','<i>Setembre</i>.'],
+ ['m',1,'dates','En quina estació som al mes de gener?',['hivern','tardor','primavera'],0,'Estacions: primavera, estiu, tardor, hivern.'],
+ ['m',1,'dates','Quina estació va després de l\'estiu?',['tardor','hivern','primavera'],0,'<i>Tardor</i> (otoño).'],
+ ['m',2,'dates','"Avui és 15 ___ agost."',['de','d\''],1,'Davant de vocal: <i>d\'agost</i>, <i>d\'abril</i>, <i>d\'octubre</i>.'],
+ ['m',2,'dates','"Avui és 15 ___ maig."',['de','d\''],0,'<i>De maig</i>.'],
+ ['m',2,'dates','Com es diu correctament?',['dilluns 3 de març','el dilluns 3 de març de 2026','les dues són correctes'],2,'Totes dues: amb article o sense, segons el context.'],
+ ['m',2,'dates','"Ens veiem ___ dilluns" (aquest dilluns que ve)',['el','al'],0,'<i>Ens veiem dilluns</i> o <i>el dilluns</i>. <i>Al dilluns</i> és incorrecte.'],
+ ['m',2,'dates','"Hi vaig ___ dilluns" (cada dilluns)',['els','als'],0,'Repetició: <i>els dilluns</i>.'],
+ ['m',1,'temps','El dia abans d\'ahir és...',['abans-d\'ahir','despús-ahir','ahir passat'],0,'<i>Abans-d\'ahir</i> (també <i>despús-ahir</i> en alguns parlars).'],
+ ['m',1,'temps','El dia després de demà és...',['demà passat','passat demà','abans-de-demà'],0,'<i>Demà passat</i>.'],
+ ['m',2,'temps','"Aquest any" es pot dir també...',['enguany','anyany','aquestany'],0,'<i>Enguany</i> = aquest any.'],
+ ['m',1,'temps','Les hores entre mitjanit i la sortida del sol són...',['la matinada','el vespre','el migdia'],0,'<i>Matinada</i>.'],
+ ['m',1,'temps','L\'última part del dia, després de la tarda, és...',['el vespre','la matinada','el matí'],0,'<i>Vespre</i>.'],
+ ['m',1,'temps','A les 12 del dia és...',['migdia','mitjanit','mig dia'],0,'<i>Migdia</i>; a les 12 de la nit: <i>mitjanit</i>.'],
+ ['m',1,'temps','Un període de quinze dies és...',['una quinzena','una desena','un trimestre'],0,'<i>Quinzena</i>.'],
+ ['m',1,'temps','Tres mesos són...',['un trimestre','un semestre','un bimestre'],0,'<i>Trimestre</i> (3), <i>semestre</i> (6).'],
+ ['m',1,'temps','Deu anys són...',['una dècada','un segle','un mil·lenni'],0,'<i>Dècada</i>; 100 anys: <i>segle</i>.'],
+ ['m',2,'temps','Una revista que surt cada setmana és...',['setmanal','mensual','quinzenal'],0,'<i>Setmanal</i>, <i>mensual</i> (cada mes), <i>anual</i>.'],
+ ['m',2,'temps','"Fa dos dies" vol dir...',['abans-d\'ahir','demà passat'],0,'Fa dos dies = <i>abans-d\'ahir</i>.'],
+ ['m',2,'temps','"D\'aquí a una setmana" és...',['dins de set dies','fa set dies'],0,'<i>D\'aquí a</i> = en el futur.'],
+ ['m',2,'temps','Quina és correcta?',['De tant en tant vaig al teatre.','De vegades en vegades vaig al teatre.'],0,'<i>De tant en tant</i>, <i>de vegades</i>.'],
+ ['m',2,'temps','Quina és correcta?',['Fins demà!','Fins a demà!','les dues'],2,'Totes dues són correctes.'],
+ ['m',1,'hores','"___ un quart de deu."',['És','Són'],0,'Amb <i>un quart</i> o <i>la una</i> → <i>és</i>.'],
+ ['m',1,'hores','"___ dos quarts de deu."',['És','Són'],1,'Plural → <i>són</i>.'],
+ ['m',1,'hores','"___ la una."',['És','Són'],0,'<i>És la una</i>.'],
+ ['m',2,'hores','A les 20:00 diem...',['les vuit del vespre','les vuit de la nit','les vint'],0,'Catalunya: matí, migdia, tarda, vespre, nit. Les vuit del vespre.'],
+ ['m',2,'hores','A les 3:00 diem...',['les tres de la matinada','les tres de la nit','les tres del matí'],0,'De mitjanit a la sortida del sol: <i>de la matinada</i>.'],
+ ['m',1,'colors','Blau + groc =',['verd','taronja','morat'],0,'<i>Verd</i>.'],
+ ['m',1,'colors','Vermell + blanc =',['rosa','taronja','gris'],0,'<i>Rosa</i>.'],
+ ['m',1,'colors','Groc + vermell =',['taronja','verd','marró'],0,'<i>Taronja</i>.'],
+ ['m',1,'colors','Blanc + negre =',['gris','marró','blau'],0,'<i>Gris</i>.'],
+ ['m',1,'colors','Blau + vermell =',['morat','verd','groc'],0,'<i>Morat</i> o <i>lila</i>.'],
+ ['m',3,'colors','Quina és correcta?',['unes faldilles verd fosc','unes faldilles verdes fosques','unes faldilles verdes fosc'],0,'Colors compostos (color + adjectiu) són invariables: <i>verd fosc</i>, <i>blau cel</i>.'],
+ ['m',2,'colors','Quina és correcta?',['uns pantalons taronja','uns pantalons taronges'],0,'Els noms usats com a color (taronja, rosa, lila, violeta) són invariables.'],
+ ['m',2,'colors','Quina és correcta?',['unes sabates marrons','unes sabates marró'],0,'<i>Marró</i> fa el plural <i>marrons</i>.'],
+ ['i',1,'num','Escriu l\'ordinal: 1r (masculí)','primer','primer, segon, tercer, quart, cinquè, sisè, setè, vuitè, novè, desè.'],
+ ['i',1,'num','Escriu l\'ordinal: 3r (masculí)','tercer','<i>Tercer</i>, femení <i>tercera</i>.'],
+ ['i',1,'num','Escriu l\'ordinal: 4t (masculí)','quart','<i>Quart</i>, femení <i>quarta</i>.'],
+ ['i',1,'num','Escriu l\'ordinal: 5è (masculí)','cinquè','<i>Cinquè</i>, femení <i>cinquena</i>.'],
+ ['i',2,'num','Escriu l\'ordinal: 5a (femení)','cinquena','<i>Cinquena</i>.'],
+ ['i',2,'num','Escriu l\'ordinal: 9è (masculí)','novè','<i>Novè</i>.'],
+ ['i',2,'num','Escriu l\'ordinal: 10a (femení)','desena','<i>Desena</i>.'],
+ ['i',2,'num','Escriu l\'ordinal: 2a (femení)','segona','<i>Segona</i>.'],
+ ['i',3,'num','Escriu l\'ordinal: 21è (masculí)','vint-i-unè','<i>Vint-i-unè</i>.'],
+ ['i',2,'num','Escriu l\'ordinal: 7è (masculí)','setè','<i>Setè</i>.'],
+ ['m',2,'num','"Viuen al ___ pis."',['cinquè','cinquèn','quint'],0,'<i>Cinquè</i>.'],
+];
+const THEORY = {
+verb:`<h3>Temps verbals</h3>
+<div class="tbl"><table><tr><th>Temps</th><th>Exemple (parlar / fer)</th><th>Quan</th></tr>
+<tr><td>Present</td><td>parlo · faig</td><td>Ara, hàbits</td></tr>
+<tr><td>Passat perifràstic</td><td>vaig parlar · vaig fer</td><td>Temps acabat: ahir, l'any passat</td></tr>
+<tr><td>Perfet</td><td>he parlat · he fet</td><td>Temps no acabat: avui, aquest any, mai</td></tr>
+<tr><td>Imperfet</td><td>parlava · feia</td><td>Descripcions i hàbits del passat</td></tr>
+<tr><td>Plusquamperfet</td><td>havia parlat · havia fet</td><td>Abans d'una altra acció passada</td></tr>
+<tr><td>Futur</td><td>parlaré · faré</td><td>Accions futures</td></tr>
+<tr><td>Condicional</td><td>parlaria · faria</td><td>Hipòtesis, cortesia</td></tr>
+<tr><td>Subjuntiu present</td><td>parli · faci</td><td>Desig, dubte, finalitat, quan + futur</td></tr>
+<tr><td>Subjuntiu imperfet</td><td>parlés · fes</td><td>Si condicional, que després de passat o condicional</td></tr>
+<tr><td>Imperatiu</td><td>parla, parleu · fes, feu</td><td>Ordres (negatiu → subjuntiu: no facis)</td></tr></table></div>
+<h4>Indicatiu o subjuntiu?</h4>
+<ul><li><b>Indicatiu</b>: crec que, és evident que, sé que, tot i que (fet real), un antecedent conegut (tinc un pis que té...).</li>
+<li><b>Subjuntiu</b>: vull que, espero que, no crec que, dubto que, és important que, perquè (finalitat), abans que, quan + futur (quan arribis), encara que (hipòtesi), antecedent desconegut (busco un pis que tingui...).</li>
+<li><b>Si</b>: si + present → futur (si plou, no sortirem) · si + subj. imperfet → condicional (si plogués, no sortiríem) · si + plusquamperfet de subj. → condicional perfet (si hagués plogut, no hauríem sortit).</li></ul>
+<h4>Normativa del 2017</h4>
+<p>Sense accent: <b>soc, venen, vens, dona</b> (de donar), <b>feu</b>, <b>mora</b>. Es manté: <b>són, té, és, sé, ve</b>.</p>
+<h4>Passat simple</h4>
+<p>Al C1 cal reconèixer-lo (textos escrits): parlà, parlares, parlà, parlàrem, parlàreu, parlaren · fou (ser), féu (fer), digué (dir), vingué (venir).</p>
+<h4>Irregulars en -c / -gui</h4>
+<p>Present en <i>-c</i> i subjuntiu en <i>-gui</i>: dic/digui, vinc/vingui, tinc/tingui, puc/pugui, bec/begui, conec/conegui, crec/cregui, prenc/prengui, visc/visqui, escric/escrigui.</p>`,
+pron:`<h3>Formes dels pronoms febles</h3>
+<div class="tbl"><table><tr><th>Pronom</th><th>Davant consonant</th><th>Davant vocal</th><th>Darrere consonant / u</th><th>Darrere vocal</th></tr>
+<tr><td>1a sg.</td><td>em</td><td>m'</td><td>-me</td><td>'m</td></tr>
+<tr><td>2a sg.</td><td>et</td><td>t'</td><td>-te</td><td>'t</td></tr>
+<tr><td>reflexiu</td><td>es</td><td>s'</td><td>-se</td><td>'s</td></tr>
+<tr><td>1a pl.</td><td>ens</td><td>ens</td><td>-nos</td><td>'ns</td></tr>
+<tr><td>2a pl.</td><td>us</td><td>us</td><td>-vos</td><td>-us</td></tr>
+<tr><td>CD masc.</td><td>el</td><td>l'</td><td>-lo</td><td>'l</td></tr>
+<tr><td>CD fem.</td><td>la</td><td>l'</td><td>-la</td><td>-la</td></tr>
+<tr><td>CD masc. pl.</td><td>els</td><td>els</td><td>-los</td><td>'ls</td></tr>
+<tr><td>CD fem. pl.</td><td>les</td><td>les</td><td>-les</td><td>-les</td></tr>
+<tr><td>CI sg.</td><td>li</td><td>li</td><td>-li</td><td>-li</td></tr>
+<tr><td>CI pl.</td><td>els</td><td>els</td><td>-los</td><td>'ls</td></tr>
+<tr><td>neutre</td><td>ho</td><td>ho</td><td>-ho</td><td>-ho</td></tr>
+<tr><td>en</td><td>en</td><td>n'</td><td>-ne</td><td>'n</td></tr>
+<tr><td>hi</td><td>hi</td><td>hi</td><td>-hi</td><td>-hi</td></tr></table></div>
+<h4>Què substitueix cada pronom</h4>
+<ul><li><b>el, la, els, les</b>: CD determinat (el llibre → el compro).</li>
+<li><b>en</b>: CD indeterminat (pa → en compro), quantitats (en tinc tres), complements amb <i>de</i> (parlar de → en parlo).</li>
+<li><b>ho</b>: CD neutre (això, una frase) i atribut (és metge → ho és).</li>
+<li><b>li, els</b>: CI (a la Maria → li; als nens → els). El CI plural és sempre <b>els</b>, mai <i>les</i>.</li>
+<li><b>hi</b>: lloc (a Barcelona → hi vaig) i complements amb <i>a, en, amb</i> (pensar en → hi penso).</li></ul>
+<h4>Combinacions més freqüents</h4>
+<div class="tbl"><table><tr><th>Combinació</th><th>Resultat</th><th>Exemple</th></tr>
+<tr><td>el + li</td><td>l'hi</td><td>L'hi dono.</td></tr>
+<tr><td>la + li</td><td>la hi</td><td>La hi dono.</td></tr>
+<tr><td>els + li</td><td>els hi</td><td>Els hi dono.</td></tr>
+<tr><td>les + li</td><td>les hi</td><td>Les hi dono.</td></tr>
+<tr><td>en + li</td><td>n'hi</td><td>N'hi dono.</td></tr>
+<tr><td>li + ho</td><td>li ho</td><td>Li ho dic.</td></tr>
+<tr><td>els (CI) + el</td><td>els el</td><td>Els el dono (col·loquial: els hi).</td></tr>
+<tr><td>em/et/es + el</td><td>me'l, te'l, se'l</td><td>Me'l dones?</td></tr>
+<tr><td>em/et/es + en</td><td>me'n, te'n, se'n</td><td>Se'n va.</td></tr>
+<tr><td>ens/us + en</td><td>ens en, us en / ens n', us n'</td><td>Ens n'anem.</td></tr></table></div>
+<h4>Posició</h4>
+<p>Davant del verb conjugat (<i>el compro</i>). Darrere de l'infinitiu, el gerundi i l'imperatiu afirmatiu, amb guionet o apòstrof (<i>comprar-lo, comprant-lo, compra'l</i>). Amb perífrasis, totes dues opcions: <i>el vull comprar / vull comprar-lo</i>.</p>`,
+prep:`<h3>Preposicions</h3>
+<h4>a / en / amb</h4>
+<ul><li><b>a</b>: destinació i situació amb topònims i noms amb article (vaig a Girona, soc a casa, a les cinc).</li>
+<li><b>en</b>: davant de demostratius, indefinits i numerals (també <i>a</i>): en aquell edifici. <b>En + infinitiu</b> = quan: <i>en sortir</i> (no <i>al sortir</i>).</li>
+<li><b>amb</b>: companyia i instrument (amb un amic, amb ganivet). Mitjà de transport: <i>amb tren</i> o <i>en tren</i>.</li></ul>
+<h4>per / per a</h4>
+<ul><li><b>per</b>: causa, mitjà, lloc de pas, agent (per por, per correu, per Lleida).</li>
+<li><b>per a</b>: destinatari, finalitat davant de nom i termini (per a tu, per al mal de cap, per a dilluns).</li>
+<li>Davant d'infinitiu (finalitat): <i>per</i> o <i>per a</i>.</li></ul>
+<h4>Caiguda i canvi</h4>
+<ul><li>Les preposicions àtones (<i>a, en, de, amb</i>) <b>cauen davant de <i>que</i></b>: estic segur que..., m'alegro que...</li>
+<li>Davant d'infinitiu es mantenen, però <b>en</b> i <b>amb</b> canvien a <b>a</b>: insistir en → insisteix a pagar; interessat a aprendre.</li></ul>
+<h4>Contraccions</h4>
+<p>al, als (a + el/els) · del, dels · pel, pels · cal (ca + el). No hi ha contracció davant de vocal: <i>a l'hospital, de l'home</i>.</p>
+<h4>Règim verbal freqüent</h4>
+<p>començar a · acabar de · deixar de · tornar a · aprendre a · oblidar-se de · tractar de · convidar a · casar-se amb · somiar amb · fixar-se en · pensar en · dependre de · adonar-se de · confiar en.</p>`,
+acc:`<h3>Accentuació</h3>
+<ul><li><b>Agudes</b> (síl·laba tònica final): porten accent si acaben en vocal, -as, -es, -is, -os, -us, -en, -in (cafè, francès, també, entén). No: interessos, ordinador.</li>
+<li><b>Planes</b>: porten accent si NO acaben en aquestes terminacions (telèfon, fàcil, mòbil, préssec). No: examen, jove.</li>
+<li><b>Esdrúixoles</b>: sempre porten accent (música, química, època).</li></ul>
+<h4>Obert o tancat</h4>
+<p><b>à</b> sempre greu. <b>í, ú</b> sempre agut. La <b>e</b> i la <b>o</b> poden ser obertes (è, ò: cafè, mòbil) o tancades (é, ó: també, cançó).</p>
+<h4>Els 15 diacrítics (normativa 2017)</h4>
+<p>bé · déu · és · mà · més · món · pèl · què · sé · sí · sòl · són · té · ús · vós (i els derivats com <i>desfés, reté, entretén</i>).</p>
+<h4>Dièresi</h4>
+<ul><li>Sobre la u de <b>gü, qü</b> + e/i quan la u sona: pingüí, qüestió, aigües.</li>
+<li>Sobre i/u per trencar diftong: veïna, raïm, països, traduït, agraïm.</li>
+<li>No en porten: els infinitius, futurs i condicionals (agrair, agrairé), ni els sufixos -isme, -ista (egoisme), ni molts prefixos (reunió).</li></ul>`,
+ort:`<h3>Ortografia</h3>
+<ul><li><b>b / v</b>: haver, govern, cavall, advocat, provar (tastar, intentar) / probable, treball.</li>
+<li><b>s / ss</b>: s sonora entre vocals (casa, rosa); s sorda entre vocals → ss (passar, pissarra).</li>
+<li><b>c / ç / tz / z</b>: ç davant de a, o, u (plaça, començo) i c davant de e, i (comencem). Dotze, tretze, setze; verbs en -itzar.</li>
+<li><b>g / j / tg / tj</b>: g davant de e, i (mengem, gener); j davant de a, o, u (menjar, jove). tg davant de e, i (metge, viatge) i tj davant de a, o, u (platja, viatjar).</li>
+<li><b>l·l</b>: intel·ligent, col·legi, il·lusió, pel·lícula. <b>ll</b>: bellesa, callar.</li>
+<li><b>h</b>: hivern, home, habitació; sense h: ou, orfe, ombra, arpa.</li></ul>
+<h4>Apostrofació</h4>
+<ul><li><b>el, de</b> s'apostrofen davant de vocal o h: l'home, d'hivern (excepte i, u semivocals: el iogurt).</li>
+<li><b>la</b> s'apostrofa davant de vocal tònica (l'hora, l'aigua), però no davant de i, u àtones (la universitat, la història), ni de <i>a-</i> negativa (la anormalitat), ni de <i>una</i> (la una).</li></ul>
+<h4>Guionet</h4>
+<p>Numerals (vint-i-dos, dos-cents), punts cardinals (nord-americà), abans-d'ahir, compostos verb + nom amb s/r/x (para-sol). Els prefixos van junts: exministre, contraatac.</p>`,
+bas:`<h3>Hores amb quarts</h3>
+<div class="tbl"><table><tr><th>Rellotge</th><th>Es diu</th></tr>
+<tr><td>5:00</td><td>Són les cinc</td></tr>
+<tr><td>5:15</td><td>És un quart de sis</td></tr>
+<tr><td>5:20</td><td>És un quart i cinc de sis</td></tr>
+<tr><td>5:25</td><td>Són dos quarts menys cinc de sis</td></tr>
+<tr><td>5:30</td><td>Són dos quarts de sis</td></tr>
+<tr><td>5:45</td><td>Són tres quarts de sis</td></tr>
+<tr><td>5:55</td><td>Són les sis menys cinc</td></tr>
+<tr><td>12:30</td><td>Són dos quarts d'una</td></tr>
+<tr><td>10:15</td><td>És un quart d'onze</td></tr></table></div>
+<p>Les hores són femenines: <i>les dues, dos quarts de dues</i>. Franges: matinada, matí, migdia, tarda, vespre, nit.</p>
+<h4>Números</h4>
+<p>Guionet entre desenes i unitats (trenta-dos), <i>vint-i-</i> (vint-i-tres), i entre unitats i centenes (dos-cents). <i>Mil</i> sense guionet (dos mil). Femení: una, dues, dues-centes. Ordinals: primer, segon, tercer, quart, cinquè, sisè, setè, vuitè, novè, desè.</p>
+<h4>Dates</h4>
+<p>El tres de març · l'onze de setembre · d'abril, d'agost, d'octubre. Dies: dilluns, dimarts, dimecres, dijous, divendres, dissabte, diumenge. Estacions: primavera, estiu, tardor, hivern.</p>
+<h4>Colors</h4>
+<p>groc/groga/grocs/grogues · blau/blava/blaus/blaves · gris/grisa/grisos/grises · marró/marrons. Invariables: rosa, taronja, lila, i els compostos (verd fosc, blau cel).</p>
+<h4>Expressions de temps</h4>
+<p>abans-d'ahir · ahir · avui · demà · demà passat · enguany · l'any passat · d'aquí a una setmana · fa dos dies · quinzena · trimestre · dècada · segle.</p>`
+};
+// ===== MOTOR: generadors, pools, calendari =====
+const MODS = {
+  verb:{n:'Verbs', topics:{conj:'Conjugació', frases:'Temps en context'}},
+  pron:{n:'Pronoms febles', topics:{cd:'CD, neutre i atribut', enhi:'En i hi', ci:'Complement indirecte', combi:'Combinacions', encl:'Darrere del verb', pron:'Verbs pronominals'}},
+  prep:{n:'Preposicions', topics:{aen:'a / en / amb', perpera:'per / per a', caiguda:'Caiguda i canvi', regim:'Règim verbal', contr:'Contraccions', barb:'Calcs i barbarismes'}},
+  acc:{n:'Accents', topics:{mots:'Accent gràfic i dièresi', diac:'Diacrítics'}},
+  ort:{n:'Ortografia', topics:{bv:'b / v', sz:'s, ss, c, ç, z, tz', gj:'g / j / tg / tj', ll:'l·l i ll', h:'h', apos:'Apostrofació', guio:'Guionet i prefixos', barb:'Barbarismes'}},
+  bas:{n:'Bàsics', topics:{hores:'Hores', num:'Números', dates:'Dates i calendari', colors:'Colors', temps:'Expressions de temps'}},
+};
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+const pickOne=(a,r)=>a[Math.floor(r()*a.length)];
+function shuffle(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const stripAcc = s=>s.normalize('NFD').replace(/[̀-̈]/g,'').normalize('NFC');
+
+// ---- pools estàtics ----
+const STATIC = {};
+function addStatic(it){ STATIC[it.id]=it; }
+function fromArr(mod, prefix, arr){
+  arr.forEach((r,i)=>{
+    if(r[0]==='i') addStatic({id:`${prefix}${i}`,mod,topic:r[2],lvl:r[1],kind:'input',q:r[3],ans:r[4].split('|'),exp:r[5]});
+    else addStatic({id:`${prefix}${i}`,mod,topic:r[2],lvl:r[1],kind:'mc',q:r[3],opts:r[4],correct:r[5],exp:r[6]});
+  });
+}
+fromArr('pron','p',PRON); fromArr('prep','r',PREP); fromArr('bas','b',BAS_STATIC);
+VFRASES.forEach((r,i)=>addStatic({id:'f'+i,mod:'verb',topic:'frases',lvl:r[0],kind:'input',q:r[1].replace('___','<span class="gap">___</span>'),sub:'('+r[2]+')',ans:r[3].split('|'),exp:r[4]}));
+const accType = w=>{
+  const v='aàeèéiíïoòóuúü'; const low=w.toLowerCase();
+  let idx=-1; for(let i=0;i<low.length;i++) if('àèéíòóú'.includes(low[i])) idx=i;
+  if(idx<0) return 'No porta accent gràfic.';
+  // compta grups vocàlics després de la vocal accentuada
+  let groups=0,inV=false; for(let i=idx+1;i<low.length;i++){const isV=v.includes(low[i]); if(isV&&!inV)groups++; inV=isV;}
+  if(groups===0) return 'Aguda: porta accent si acaba en vocal, -as, -es, -is, -os, -us, -en, -in.';
+  if(groups===1) return 'Plana: porta accent si NO acaba en vocal, -as, -es, -is, -os, -us, -en, -in.';
+  return 'Esdrúixola: sempre porta accent.';
+};
+ACC_WORDS.forEach((w,i)=>{
+  const hasDier=/[ïü]/i.test(w);
+  const plain = w.replace(/[àèéíòóúÀÈÉÍÒÓÚïüÏÜ]/g,c=>stripAcc(c));
+  const lvl = hasDier?2 : (w===plain?2:1);
+  let exp = accType(w);
+  if(hasDier) exp += ' La dièresi (ï, ü) indica que la vocal es pronuncia separada o que la u sona (gü, qü).';
+  if(/[èéòó]/.test(w)) exp += ' Fixa\'t en l\'accent obert o tancat: '+(/[èò]/.test(w)?'obert (è, ò).':'tancat (é, ó).');
+  addStatic({id:'a'+i,mod:'acc',topic:'mots',lvl,kind:'input',q:`Escriu la paraula amb els accents i la dièresi correctes: <b class="word">${plain}</b>`,sub:'Si no porta accent, escriu-la igual.',ans:[w],exp:`<b>${w}</b>. ${exp}`,strict:true});
+});
+ACC_DIAC.forEach((r,i)=>addStatic({id:'ad'+i,mod:'acc',topic:'diac',lvl:i>=23?3:2,kind:'mc',q:r[0],opts:r[1],correct:r[2],exp:r[3]}));
+ORT.forEach((r,i)=>addStatic({id:'o'+i,mod:'ort',topic:r[1],lvl:r[0],kind:'mc',q:r[2].includes('__')||r[2].includes('→')?`Tria la forma correcta: <b>${r[2]}</b>`:r[2],opts:r[3],correct:r[4],exp:r[5]}));
+
+// ---- generadors ----
+const HN=['','una','dues','tres','quatre','cinc','sis','set','vuit','nou','deu','onze','dotze'];
+const deH=n=>(n===1||n===11)?`d'${HN[n]}`:`de ${HN[n]}`;
+const theH=n=>n===1?'la una':`les ${HN[n]}`;
+function horaItem(H,M){
+  const h12=((H+11)%12)+1, nx=(h12%12)+1;
+  const map={15:'un quart',30:'dos quarts',45:'tres quarts',20:'un quart i cinc',35:'dos quarts i cinc',50:'tres quarts i cinc',10:'un quart menys cinc',25:'dos quarts menys cinc',40:'tres quarts menys cinc'};
+  let main, alt=[];
+  if(M===0) main=theH(h12);
+  else if(M===5) main=theH(h12)+' i cinc';
+  else if(M===55) { main=theH(nx)+' menys cinc'; alt.push('tres quarts i deu '+deH(nx)); }
+  else main=`${map[M]} ${deH(nx)}`;
+  if(M===15) alt.push(theH(h12)+' i quart'); if(M===30) alt.push(theH(h12)+' i mitja'); if(M===45) alt.push(theH(nx)+' menys quart');
+  const verb = (main.startsWith('la una')||main.startsWith('un quart'))?'és':'són';
+  const all=[main,...alt].flatMap(a=>[a,'és '+a,'són '+a]);
+  const dig=`${H}:${String(M).padStart(2,'0')}`;
+  return {id:`h:${H}:${M}`,mod:'bas',topic:'hores',lvl:[0,15,30,45].includes(M)?1:2,kind:'input',
+    q:`Quina hora és? <b class="clock">${dig}</b>`,sub:'Fes servir el sistema de quarts (sense "del matí", "de la tarda"...)',ans:all,
+    exp:`<b>${verb[0].toUpperCase()+verb.slice(1)} ${main}.</b> Els quarts compten cap a l'hora següent: entre les ${HN[h12]} i les ${HN[nx]}, "${deH(nx)}". Les hores són femenines (les dues, d'una, d'onze).`};
+}
+function genHora(r,lvlMax){
+  const Ms = lvlMax>=2?[0,15,30,45,15,30,45,20,35,50,10,25,40,5,55]:[0,15,30,45,15,30,45];
+  return horaItem(Math.floor(r()*24)||12, pickOne(Ms,r));
+}
+const U=['zero','u','dos','tres','quatre','cinc','sis','set','vuit','nou','deu','onze','dotze','tretze','catorze','quinze','setze','disset','divuit','dinou'];
+const T={2:'vint',3:'trenta',4:'quaranta',5:'cinquanta',6:'seixanta',7:'setanta',8:'vuitanta',9:'noranta'};
+function u1(n,f){ if(n===1) return f?'una':'un'; if(n===2) return f?'dues':'dos'; return U[n]; }
+function b100(n,f){ if(n<20) return u1(n,f); const t=Math.floor(n/10),u=n%10; if(!u) return T[t]; return T[t]+(t===2?'-i-':'-')+u1(u,f); }
+function b1000(n,f){ const h=Math.floor(n/100),r=n%100; let s=''; if(h===1) s='cent'; else if(h>1) s=u1(h,f)+(f?'-centes':'-cents'); if(r) s+=(s?' ':'')+b100(r,f); return s; }
+function num2cat(n,f){ const th=Math.floor(n/1000),r=n%1000; let s=''; if(th===1) s='mil'; else if(th>1) s=b1000(th,f)+' mil'; if(r) s+=(s?' ':'')+b1000(r,f); return s; }
+const NOUNS=[['llibres',0],['cases',1],['persones',1],['euros',0],['pàgines',1],['anys',0],['quilòmetres',0],['cadires',1],['alumnes',0],['places',1]];
+function numItem(n,ni){
+  const [noun,f]=NOUNS[ni]; const w=num2cat(n,!!f);
+  return {id:`n:${n}:${ni}`,mod:'bas',topic:'num',lvl:n<100?1:(n<1000?2:3),kind:'input',q:`Escriu el número en lletres: <b>${n.toLocaleString('ca-ES')} ${noun}</b>`,sub:'Només el número, sense el nom.',ans:[w],
+    exp:`<b>${w} ${noun}</b>. Guionet entre desenes i unitats (trenta-dos) i entre unitats i centenes (dos-cents); <i>vint-i-</i> porta dos guionets. ${f?'Amb noms femenins: una, dues, dues-centes...':''}`};
+}
+function genNum(r,lvlMax){
+  let n; const L=1+Math.floor(r()*lvlMax);
+  if(L===1) n=21+Math.floor(r()*79); else if(L===2) n=101+Math.floor(r()*899); else n=1001+Math.floor(r()*1998);
+  if(n%100===11) n++;
+  return numItem(n, Math.floor(r()*NOUNS.length));
+}
+const MESOS=['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
+function dataItem(d,m){
+  const day = d===11?"l'onze":'el '+b100(d,false);
+  const mes = (/^[aeiou]/.test(MESOS[m])?"d'":'de ')+MESOS[m];
+  const ans=`${day} ${mes}`;
+  return {id:`d:${d}:${m}`,mod:'bas',topic:'dates',lvl:(d===11||/^[ao]/.test(MESOS[m]))?2:1,kind:'input',q:`Escriu la data en lletres, amb article: <b class="clock">${d}/${m+1}</b>`,sub:'Exemple: 5/3 → el cinc de març',ans:[ans, ans.replace(/^el /,'').replace(/^l'/,'')],
+    exp:`<b>${ans}</b>. <i>De</i> s'apostrofa davant d'abril, agost i octubre; l'article s'apostrofa davant d'<i>onze</i> (l'onze de setembre).`};
+}
+function genData(r){ let d=2+Math.floor(r()*29); if(d===21) d=11; if(d===31) d=30; let m=Math.floor(r()*12); if(m===1&&d>28) d=28; if(r()<0.35) m=pickOne([3,7,9],r); return dataItem(d,m); }
+const COLS={blanc:['blanc','blanca','blancs','blanques'],negre:['negre','negra','negres','negres'],groc:['groc','groga','grocs','grogues'],vermell:['vermell','vermella','vermells','vermelles'],verd:['verd','verda','verds','verdes'],blau:['blau','blava','blaus','blaves'],gris:['gris','grisa','grisos','grises'],morat:['morat','morada','morats','morades'],daurat:['daurat','daurada','daurats','daurades'],marró:['marró',null,'marrons',null],rosa:['rosa','rosa','rosa','rosa'],taronja:['taronja','taronja','taronja','taronja']};
+const CNOUNS=[['una camisa',1],['un cotxe',0],['unes sabates',3],['uns pantalons',2],['unes flors',3],['uns ulls',2],['una paret',1],['un jersei',0],['unes cortines',3],['uns mitjons',2],['una bufanda',1],['un paraigua',0]];
+function colorItem(c,ni){
+  const [nn,k]=CNOUNS[ni]; const form=COLS[c][k];
+  const inv=(c==='rosa'||c==='taronja');
+  const lvl = ['groc','blau','gris'].includes(c)&&k>0?2:(inv?3:1);
+  return {id:`k:${c}:${ni}`,mod:'bas',topic:'colors',lvl,kind:'input',q:`Fes la concordança: <b>${nn} ___</b> <span class="muted">(${c})</span>`,ans:[form],
+    exp:`<b>${nn} ${form}</b>. ${inv?'<i>Rosa</i> i <i>taronja</i> com a color són invariables.':'Formes: '+COLS[c].filter(Boolean).join(', ')+'.'}`};
+}
+function genColor(r){ let c,ni; do{ c=pickOne(Object.keys(COLS),r); ni=Math.floor(r()*CNOUNS.length);}while(!COLS[c][CNOUNS[ni][1]]); return colorItem(c,ni); }
+function conjItem(inf,t,p){
+  const v=VERBS[inf]; const forms=v.t[t]; const isImp=t==='imper';
+  const pers=isImp?IMPER_PERS[p]:PERS[p];
+  const tbl=(isImp?IMPER_PERS:PERS).map((pp,i)=>`<tr${i===p?' class="hl"':''}><td>${pp}</td><td>${forms[i].replace(/\|/g,' / ')}</td></tr>`).join('');
+  return {id:`c:${inf}:${t}:${p}`,mod:'verb',topic:'conj',lvl:Math.max(TENSES[t].lvl, v.lvl===2&&TENSES[t].lvl<3?TENSES[t].lvl+0:TENSES[t].lvl),kind:'input',
+    q:`<span class="verb">${inf}</span> <span class="muted">(${v.gl})</span>`,sub:`${TENSES[t].n} · <b>${pers}</b>`,ans:forms[p].split('|'),
+    exp:`${TENSES[t].tip}<table class="ptable">${tbl}</table>`};
+}
+function genConj(r,tenses,stage){
+  const infs=Object.keys(VERBS);
+  for(let k=0;k<50;k++){
+    const t=pickOne(tenses,r); const inf=pickOne(infs,r);
+    if(stage===1 && VERBS[inf].lvl===2 && r()<0.4) continue;
+    if(!VERBS[inf].t[t]) continue;
+    const p = t==='imper' ? pickOne([0,0,1,3,3],r) : Math.floor(r()*6);
+    return conjItem(inf,t,p);
+  }
+  return conjItem('fer','pres',0);
+}
+function itemById(id){
+  if(STATIC[id]) return STATIC[id];
+  const p=id.split(':');
+  try{
+    if(p[0]==='c') return conjItem(p[1],p[2],+p[3]);
+    if(p[0]==='h') return horaItem(+p[1],+p[2]);
+    if(p[0]==='n') return numItem(+p[1],+p[2]);
+    if(p[0]==='d') return dataItem(+p[1],+p[2]);
+    if(p[0]==='k') return colorItem(p[1],+p[2]);
+  }catch(e){}
+  return null;
+}
+
+// ---- selecció ----
+function pickStatic(filter,n,r,lw,seen,exclude){
+  let pool=Object.values(STATIC).filter(it=>filter(it)&&!(exclude&&exclude.has(it.id)));
+  const out=[];
+  while(out.length<n && pool.length){
+    const ws=pool.map(it=>(lw[it.lvl-1]||0.05)/(1+(seen[it.id]||0)*1.5));
+    let tot=ws.reduce((a,b)=>a+b,0), x=r()*tot, i=0;
+    for(;i<pool.length-1;i++){ x-=ws[i]; if(x<=0) break; }
+    out.push(pool[i]); pool.splice(i,1);
+  }
+  return out;
+}
+function genMany(fn,n){ const out=[],ids=new Set(); for(let k=0;k<n*6&&out.length<n;k++){const it=fn(); if(!ids.has(it.id)){ids.add(it.id);out.push(it);} } return out; }
+
+// ---- pla de 16 setmanes ----
+const VFOCUS=[['pres','perif'],['fut','cond'],['impf','perfet'],['subjp','imper'],['subji','plusq'],['subjp','subji'],null];
+const VFOCUS_N=['Present i passat perifràstic','Futur i condicional','Imperfet i perfet','Subjuntiu present i imperatiu','Subjuntiu imperfet i plusquamperfet','Indicatiu o subjuntiu?','Tots els temps'];
+const PFOCUS=['cd','enhi','ci','combi','encl','pron',null];
+const DAYN=['Dilluns','Dimarts','Dimecres','Dijous','Divendres'];
+const ALLT=Object.keys(TENSES);
+function weekInfo(w){ // w 1..16
+  const stage=w<=8?1:2, cw=w<=8?w:w-8;
+  if(cw===8) return {w,stage,cw,consol:true,title:w===16?'Setmana final: simulacre':'Consolidació i simulacre',verbN:'Repàs de tots els temps',pronN:'Repàs de tots els pronoms'};
+  return {w,stage,cw,consol:false,verbF:VFOCUS[cw-1],pronF:PFOCUS[cw-1],verbN:VFOCUS_N[cw-1],pronN:PFOCUS[cw-1]?MODS.pron.topics[PFOCUS[cw-1]]:'Tots els pronoms',title:`${VFOCUS_N[cw-1]} · ${PFOCUS[cw-1]?MODS.pron.topics[PFOCUS[cw-1]]:'Tots els pronoms'}`};
+}
+function seenTenses(wi){ if(wi.stage===2||wi.consol) return ALLT; const s=new Set(); for(let i=0;i<wi.cw;i++) (VFOCUS[i]||ALLT).forEach(t=>s.add(t)); return [...s]; }
+function seenPron(wi){ if(wi.stage===2||wi.consol) return null; return PFOCUS.slice(0,wi.cw).filter(Boolean); }
+const DAYPLAN=[
+  {A:'verbconj',B:'acc',C:'hores'},
+  {A:'pron',B:'ort',C:'num'},
+  {A:'verbmix',B:'prep',C:'dates'},
+  {A:'pronmix',B:'rot',C:'colors'},
+  {A:'repas',B:'simul',C:'temps'},
+];
+function blockLabel(code,wi){
+  return {verbconj:'Verbs · '+wi.verbN, verbmix:'Verbs en context', pron:'Pronoms · '+wi.pronN, pronmix:'Pronoms · barreja', acc:'Accents', ort:'Ortografia', prep:'Preposicions',
+    rot:['Accents','Ortografia','Preposicions'][wi.w%3], repas:'Repàs dels teus errors', simul:'Mini simulacre', hores:'Bàsics · Hores', num:'Bàsics · Números', dates:'Bàsics · Dates', colors:'Bàsics · Colors', temps:'Bàsics · Expressions de temps',
+    mixA:'Verbs i pronoms', mixB:'Accents, ortografia i preposicions', mixC:'Bàsics variats', exam:'Simulacre complet'}[code];
+}
+function sessionPlan(idx){
+  const w=Math.floor(idx/5)+1, d=idx%5, wi=weekInfo(w);
+  if(wi.consol) return {w,d,wi,blocks: d===4?[['exam',30]]:[['mixA',10],['mixB',8],['mixC',5]]};
+  const p=DAYPLAN[d]; return {w,d,wi,blocks:[[p.A, p.A==='simul'?10:10],[p.B, p.B==='simul'?10:8],[p.C,5]]};
+}
+function buildBlock(code,n,wi,r,S){
+  const lw = wi.stage===1?[0.45,0.35,0.2]:[0.2,0.4,0.4];
+  const seen=S.seen, lvlMax=wi.stage===1&&wi.cw<3?2:3;
+  const st=(f,k)=>pickStatic(f,k,r,lw,seen);
+  const conj=(k,tenses)=>genMany(()=>genConj(r,tenses,wi.stage),k);
+  const basGen={hores:()=>genHora(r,lvlMax),num:()=>genNum(r,lvlMax),dates:()=>genData(r),colors:()=>genColor(r)};
+  const bas=(topic,k)=>{ if(topic==='temps') return st(it=>it.mod==='bas'&&it.topic==='temps',k);
+    const nStatic=Math.min(2,k-3); return shuffle([...genMany(basGen[topic],k-nStatic), ...st(it=>it.mod==='bas'&&it.topic===topic,nStatic)],r); };
+  const sp=seenPron(wi);
+  switch(code){
+    case 'verbconj':{ const f=wi.verbF||ALLT; return shuffle([...conj(7,f), ...conj(3,seenTenses(wi))],r); }
+    case 'verbmix':{ const f=wi.verbF||ALLT; return shuffle([...conj(5,f), ...st(it=>it.topic==='frases',5)],r); }
+    case 'pron': return shuffle([...st(it=>it.mod==='pron'&&(wi.pronF?it.topic===wi.pronF:true),7), ...st(it=>it.mod==='pron'&&(!sp||sp.includes(it.topic))&&it.topic!==wi.pronF,3)],r);
+    case 'pronmix': return st(it=>it.mod==='pron'&&(!sp||sp.includes(it.topic)),n);
+    case 'acc': return st(it=>it.mod==='acc',n);
+    case 'ort': return st(it=>it.mod==='ort',n);
+    case 'prep': return st(it=>it.mod==='prep',n);
+    case 'rot': return st(it=>it.mod===['acc','ort','prep'][wi.w%3],n);
+    case 'hores': case 'num': case 'dates': case 'colors': case 'temps': return bas(code,n);
+    case 'repas':{ const errs=Object.keys(S.err||{}).sort((a,b)=>(S.err[b]-S.err[a])).map(itemById).filter(Boolean).slice(0,n);
+      if(errs.length<n){ errs.push(...conj(Math.ceil((n-errs.length)/2),seenTenses(wi))); errs.push(...st(it=>it.mod==='pron'&&(!sp||sp.includes(it.topic)),n-errs.length)); }
+      return shuffle(errs,r); }
+    case 'simul': return shuffle([...conj(3,seenTenses(wi)), ...st(it=>it.topic==='frases',1), ...st(it=>it.mod==='pron'&&(!sp||sp.includes(it.topic)),3), ...st(it=>it.mod==='prep',1), ...st(it=>it.mod==='acc',1), ...st(it=>it.mod==='ort',1)],r);
+    case 'mixA': return shuffle([...conj(4,ALLT), ...st(it=>it.topic==='frases',2), ...st(it=>it.mod==='pron',4)],r);
+    case 'mixB': return st(it=>['acc','ort','prep'].includes(it.mod),n);
+    case 'mixC': return shuffle([genHora(r,3),genNum(r,3),genData(r),genColor(r), ...st(it=>it.mod==='bas'&&it.topic==='temps',1)],r);
+    case 'exam': return shuffle([...conj(8,ALLT), ...st(it=>it.topic==='frases',4), ...st(it=>it.mod==='pron',8), ...st(it=>it.mod==='prep',3), ...st(it=>it.mod==='acc',3), ...st(it=>it.mod==='ort',2), genHora(r,3), genNum(r,3)],r);
+  }
+  return [];
+}
+function practiceBlock(mod,topic,r,S){
+  const lw=[0.34,0.33,0.33];
+  if(mod==='verb'&&topic==='conj') return genMany(()=>genConj(r,ALLT,2),10);
+  if(mod==='verb'&&topic&&TENSES[topic]) return genMany(()=>genConj(r,[topic],2),10);
+  if(mod==='bas'&&topic&&topic!=='temps'){ const g={hores:()=>genHora(r,3),num:()=>genNum(r,3),dates:()=>genData(r),colors:()=>genColor(r)}[topic]; return shuffle([...genMany(g,8),...pickStatic(it=>it.mod==='bas'&&it.topic===topic,2,r,lw,S.seen)],r); }
+  if(mod==='verb'&&!topic) return shuffle([...genMany(()=>genConj(r,ALLT,2),6),...pickStatic(it=>it.topic==='frases',4,r,lw,S.seen)],r);
+  return pickStatic(it=>it.mod===mod&&(!topic||it.topic===topic),10,r,lw,S.seen);
+}
+
+// ---- correcció ----
+function norm(s){ return (s||'').toLowerCase().replace(/[’‘`´]/g,"'").replace(/l[.•∙·-]l/g,'l·l').replace(/'\s+/g,"'").replace(/[.!?¡¿,;:]+/g,' ').replace(/\s+/g,' ').trim(); }
+function check(it,val){
+  if(it.kind==='mc') return {ok: val===it.correct, close:false};
+  const v=norm(val); const ok=it.ans.some(a=>norm(a)===v);
+  const close=!ok && it.ans.some(a=>stripAcc(norm(a))===stripAcc(v));
+  return {ok,close};
+}
+// ===== INTERFÍCIE =====
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY='catalaC1.v1';
+function mondayOf(d){ const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); const k=(x.getDay()+6)%7; x.setDate(x.getDate()-k); return x; }
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseISO=s=>{const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d);};
+function freshState(){ return {v:1,start:iso(mondayOf(new Date())),days:{},err:{},seen:{},stats:{},upd:0}; }
+let S=freshState();
+try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&d.v===1) S=Object.assign(freshState(),d); } }catch(e){}
+
+// ---- desada ----
+let cloudRef=null, writing=false, again=false, tmr=null;
+function setSync(t){ const el=$('#sync'); if(el) el.textContent=t; }
+function save(){
+  S.upd=Date.now();
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+  if(cloudRef){ clearTimeout(tmr); tmr=setTimeout(pushCloud,1200); }
+}
+async function pushCloud(){
+  if(!cloudRef) return; if(writing){ again=true; return; }
+  writing=true; setSync('Desant…');
+  try{ await cloudRef.set(JSON.parse(JSON.stringify(S))); setSync('Desat al teu compte'); }
+  catch(e){ setSync('Desat en aquest navegador'); }
+  writing=false; if(again){ again=false; pushCloud(); }
+}
+async function initCloud(){
+  try{
+    if(!window.claude||!window.claude.use) return;
+    const [user,db]=await Promise.all([window.claude.use('user'),window.claude.use('db')]);
+    if(!user||!db) return;
+    const id=await user.id(); if(!id) return;
+    cloudRef=db.doc('data/users/'+id+'/progress');
+    const snap=await cloudRef.get();
+    if(snap.exists){
+      const d=snap.data();
+      if((d.upd||0)>(S.upd||0)){ S=Object.assign(freshState(),JSON.parse(JSON.stringify(d))); try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} if(!RUN) render(); }
+      else if((S.upd||0)>(d.upd||0)) pushCloud();
+    } else if(S.upd) pushCloud();
+    setSync('Desat al teu compte');
+  }catch(e){ cloudRef=null; }
+}
+
+// ---- calendari ----
+const TOTAL=80;
+function sessionDate(idx){ const d=parseISO(S.start); d.setDate(d.getDate()+Math.floor(idx/5)*7+idx%5); return d; }
+function todayIdx(){ const t=new Date(); const t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()); const diff=Math.round((t0-parseISO(S.start))/864e5); if(diff<0) return {before:true}; const w=Math.floor(diff/7),dw=diff%7; if(w>=16) return {after:true}; if(dw>4) return {weekend:true,w}; return {idx:w*5+dw}; }
+function nextPending(){ for(let i=0;i<TOTAL;i++) if(!S.days[i]) return i; return null; }
+const fmtD=(d,o)=>d.toLocaleDateString('ca-ES',o||{weekday:'long',day:'numeric',month:'long'});
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+const MIN={A:8,B:7,C:5};
+const DAB=['Dl','Dt','Dc','Dj','Dv'];
+
+// ---- vistes ----
+let VIEW='avui', RUN=null, THEO='verb';
+function setView(v){ VIEW=v; RUN=null; render(); window.scrollTo(0,0); }
+document.getElementById('tabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) setView(b.dataset.v); });
+function render(){
+  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-current',String(b.dataset.v===VIEW&&!RUN)));
+  const m=$('#main');
+  if(RUN){ m.innerHTML=RUN.done?renderResult():renderQ(); bindRun(); return; }
+  m.innerHTML=({avui:vAvui,cal:vCal,prac:vPrac,teo:vTeo,prog:vProg})[VIEW]();
+  bindView();
+}
+function sessionCard(idx,label){
+  const pl=sessionPlan(idx), d=sessionDate(idx), st=S.days[idx];
+  const items=pl.blocks.map(([c,n],i)=>`<li><span class="n">${i+1}</span><span>${esc(blockLabel(c,pl.wi))} <span class="muted">· ${n} exercicis</span></span><span class="min">${pl.blocks.length===1?'25':MIN['ABC'[i]]} min</span></li>`).join('');
+  return `<section class="card today">
+    <div class="when"><span class="eyebrow">${label} · Setmana ${pl.w} de 16 · ${esc(fmtD(d))}</span>${st?`<span class="eyebrow" style="color:var(--ok)">Feta · ${st.ok}/${st.n}</span>`:''}</div>
+    <h2>${esc(pl.wi.title)}</h2>
+    <ol class="blocks">${items}</ol>
+    <div class="row"><button class="btn primary" data-start="${idx}">${st?'Torna-la a fer':'Comença la sessió'}</button>${S.err&&Object.keys(S.err).length?`<button class="btn" data-review="1">Repassa errors (${Object.keys(S.err).length})</button>`:''}</div>
+  </section>`;
+}
+function weekStrip(w){
+  const t=todayIdx();
+  return `<div class="weekstrip">${[0,1,2,3,4].map(d=>{const i=(w-1)*5+d, st=S.days[i]; return `<button class="ws ${st?'done':''} ${t.idx===i?'now':''}" data-start="${i}" aria-label="Sessió ${DAYN[d]}">${DAB[d]}<b>${st?pct(st.ok,st.n)+'%':sessionDate(i).getDate()}</b></button>`}).join('')}</div>`;
+}
+function totals(){ let ok=0,n=0; Object.values(S.stats).forEach(s=>{ok+=s.ok;n+=s.n}); return {ok,n,done:Object.keys(S.days).length,err:Object.keys(S.err).length}; }
+function vAvui(){
+  const t=todayIdx(), np=nextPending(); let html='';
+  if(t.idx!=null){
+    html+=sessionCard(t.idx,'Avui');
+    if(S.days[t.idx] && np!=null && np!==t.idx) html+=sessionCard(np,'Pendent');
+  } else if(t.before){ html+=`<p class="muted">El pla comença el ${esc(fmtD(parseISO(S.start)))}. Pots avançar la primera sessió:</p>`+sessionCard(0,'Primera sessió'); }
+  else if(t.after){ html+=`<section class="card"><h2>Has arribat al final del pla</h2><p class="muted">Fes servir Practica i el repàs d'errors per mantenir-te en forma fins a l'examen.</p></section>`; }
+  else { html+=`<p class="muted">Avui és cap de setmana. Si vols, recupera una sessió pendent o repassa els errors.</p>`; if(np!=null) html+=sessionCard(np,'Pendent'); }
+  const ref = t.idx!=null?Math.floor(t.idx/5)+1 : (np!=null?Math.floor(np/5)+1:16);
+  const T=totals();
+  html+=`<section style="display:grid;gap:10px"><span class="eyebrow">Setmana ${ref}</span>${weekStrip(ref)}</section>
+  <section class="stats">
+    <div class="stat"><span class="eyebrow">Sessions</span><b>${T.done} / ${TOTAL}</b><div class="meter"><i style="width:${pct(T.done,TOTAL)}%"></i></div></div>
+    <div class="stat"><span class="eyebrow">Encerts</span><b>${T.n?pct(T.ok,T.n)+'%':'–'}</b><span class="muted">${T.n} exercicis fets</span></div>
+    <div class="stat"><span class="eyebrow">Errors per repassar</span><b>${T.err}</b><span class="muted">tornen els divendres</span></div>
+  </section>`;
+  return html;
+}
+function vCal(){
+  const t=todayIdx(); let h=`<section style="display:grid;gap:6px"><h2>Pla de 16 setmanes</h2><p class="muted">Cada dia laborable, 20 minuts. Verbs i pronoms cada dia, i la dificultat puja en espiral: les setmanes 9 a 15 tornen als mateixos temes amb exercicis més difícils. Divendres repassa els teus errors.</p></section><div class="cal">`;
+  for(let w=1;w<=16;w++){
+    const wi=weekInfo(w); const d0=sessionDate((w-1)*5), d4=sessionDate((w-1)*5+4);
+    h+=`<div class="wk ${wi.consol?'consol':''}"><header><span class="num">S${String(w).padStart(2,'0')}</span><h3>${esc(wi.title)}</h3><span class="muted" style="font-size:.85rem">${d0.getDate()}/${d0.getMonth()+1} – ${d4.getDate()}/${d4.getMonth()+1}</span></header><div class="cells">`;
+    for(let d=0;d<5;d++){ const i=(w-1)*5+d, st=S.days[i], ex=wi.consol&&d===4;
+      h+=`<button class="cell ${st?'done':''} ${t.idx===i?'now':''} ${ex?'exam':''}" data-start="${i}">${DAB[d]} ${sessionDate(i).getDate()}<small>${st?pct(st.ok,st.n)+'%':(ex?'simulacre':'·')}</small></button>`; }
+    h+=`</div></div>`;
+  }
+  return h+'</div>';
+}
+function vPrac(){
+  const ne=Object.keys(S.err).length;
+  let h=`<section style="display:grid;gap:6px"><h2>Practica lliure</h2><p class="muted">Tria un tema i fes 10 exercicis, fora del calendari.</p></section>`;
+  if(ne) h+=`<div><button class="btn primary" data-review="1">Repassa els teus errors (${ne})</button></div>`;
+  h+='<div class="mods">';
+  for(const [k,m] of Object.entries(MODS)){
+    let chips=`<button class="chip" data-prac="${k}|">Tot</button>`+Object.entries(m.topics).map(([t,n])=>`<button class="chip" data-prac="${k}|${t}">${esc(n)}</button>`).join('');
+    if(k==='verb') chips+=Object.entries(TENSES).map(([t,o])=>`<button class="chip" data-prac="verb|${t}">${esc(o.n)}</button>`).join('');
+    h+=`<section class="card" style="display:grid;gap:10px;align-content:start"><h3>${m.n}</h3><div class="chips">${chips}</div></section>`;
+  }
+  return h+'</div>';
+}
+function vTeo(){
+  return `<section style="display:grid;gap:10px"><h2>Teoria</h2><div class="chips">${Object.entries(MODS).map(([k,m])=>`<button class="chip ${k===THEO?'on':''}" data-theo="${k}">${m.n}</button>`).join('')}</div></section><section class="card theory">${THEORY[THEO]}</section>`;
+}
+function vProg(){
+  const T=totals();
+  const bars=Object.entries(MODS).map(([k,m])=>{const s=S.stats[k]||{ok:0,n:0}; return `<div class="modbar"><span>${m.n}</span><div class="meter"><i style="width:${pct(s.ok,s.n)}%"></i></div><span>${s.n?pct(s.ok,s.n)+'%':'–'}</span></div>`}).join('');
+  const errs=Object.entries(S.err).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([id,c])=>{const it=itemById(id); if(!it) return ''; const a=it.kind==='mc'?it.opts[it.correct]:it.ans[0]; const q=(it.q+' '+(it.sub||'')).replace(/<[^>]+>/g,''); return `<li><b>${esc(a)}</b> <span class="muted">— ${esc(q.slice(0,90))} (${c}×)</span></li>`}).join('');
+  return `<section style="display:grid;gap:6px"><h2>El teu progrés</h2><p class="muted">${T.done} de ${TOTAL} sessions fetes · ${T.n} exercicis · ${T.n?pct(T.ok,T.n):0}% d'encerts</p></section>
+  <section class="card" style="display:grid;gap:10px"><h3>Encerts per mòdul</h3>${bars}</section>
+  <section class="card" style="display:grid;gap:10px"><h3>Errors que més es repeteixen</h3>${errs?`<ul class="errlist">${errs}</ul>`:'<p class="muted">Encara no n\'hi ha. Quan t\'equivoquis, els errors es guardaran aquí i tornaran a sortir els divendres.</p>'}</section>
+  <section class="card" style="display:grid;gap:12px"><h3>Configuració</h3>
+    <label class="row" for="startdate">Dilluns d'inici del pla <input type="date" id="startdate" value="${S.start}"></label>
+    <div id="resetzone"><button class="btn" id="reset">Esborra tot el progrés</button></div>
+  </section>`;
+}
+function bindView(){
+  const m=$('#main');
+  m.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>startDay(+b.dataset.start));
+  m.querySelectorAll('[data-review]').forEach(b=>b.onclick=startReview);
+  m.querySelectorAll('[data-prac]').forEach(b=>b.onclick=()=>{const [mod,t]=b.dataset.prac.split('|'); startPrac(mod,t||null);});
+  m.querySelectorAll('[data-theo]').forEach(b=>b.onclick=()=>{THEO=b.dataset.theo; render();});
+  const sd=$('#startdate'); if(sd) sd.onchange=()=>{ if(!sd.value) return; S.start=iso(mondayOf(parseISO(sd.value))); save(); render(); };
+  const rs=$('#reset'); if(rs) rs.onclick=()=>{ $('#resetzone').innerHTML=`<div class="confirm"><span>Segur? S'esborraran totes les sessions i errors.</span><button class="btn" id="rsno">Cancel·la</button><button class="btn primary" id="rsyes">Sí, esborra-ho</button></div>`; $('#rsno').onclick=render; $('#rsyes').onclick=()=>{ const st=S.start; S=freshState(); S.start=st; save(); render(); }; };
+}
+
+// ---- sessions ----
+function startDay(idx){
+  const pl=sessionPlan(idx); const att=(S.days[idx]&&S.days[idx].att)||0;
+  const r=mulberry32(hashStr('s'+idx+':'+att));
+  const items=[]; pl.blocks.forEach(([c,n],bi)=>buildBlock(c,n,pl.wi,r,S).forEach(it=>items.push({it,block:blockLabel(c,pl.wi),bi,nb:pl.blocks.length})));
+  begin({kind:'day',idx,att,title:`Setmana ${pl.w} · ${DAYN[pl.d]}`,items});
+}
+function startPrac(mod,topic){
+  const r=mulberry32(Date.now()&0xffffffff);
+  const name=topic?(MODS[mod].topics[topic]||TENSES[topic].n):'Tot';
+  begin({kind:'prac',title:`${MODS[mod].n} · ${name}`,items:practiceBlock(mod,topic,r,S).map(it=>({it,block:name,bi:0,nb:1}))});
+}
+function startReview(){
+  const ids=Object.keys(S.err).sort((a,b)=>S.err[b]-S.err[a]).slice(0,15);
+  const r=mulberry32(Date.now()&0xffffffff);
+  begin({kind:'review',title:'Repàs d\'errors',items:shuffle(ids.map(itemById).filter(Boolean),r).map(it=>({it,block:'Repàs d\'errors',bi:0,nb:1}))});
+}
+function begin(run){
+  const r=mulberry32(hashStr(run.title+run.items.length));
+  run.items.forEach(x=>{ if(x.it.kind==='mc'){ const o=x.it.opts.map((t,i)=>({t,i})); const keep=o.some(z=>/\(res\)|dues|les dues/.test(z.t)); x.order=keep?o:shuffle(o,r);} });
+  RUN=Object.assign(run,{i:0,res:[],answered:null,done:false}); render(); window.scrollTo(0,0);
+}
+const KEYS=['à','è','é','í','ï','ò','ó','ú','ü','ç','l·l','\''];
+function renderQ(){
+  const x=RUN.items[RUN.i], it=x.it, n=RUN.items.length, a=RUN.answered;
+  let body;
+  if(it.kind==='mc'){
+    body=`<div class="opts">${x.order.map((o,k)=>{ let cls=''; if(a){ if(o.i===it.correct) cls='ok'; else if(o.i===a.val) cls='ko'; } return `<button class="opt ${cls}" data-opt="${o.i}" ${a?'disabled':''}><span class="muted" style="font-family:var(--f-mono);font-size:.8rem">${k+1}</span>&nbsp; ${esc(o.t)}</button>`}).join('')}</div>`;
+  } else {
+    body=`<div class="answer"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escriu la resposta" class="${a?(a.ok?'ok':'ko'):''}" ${a?'readonly':''} value="${a?esc(a.val):''}"><button class="btn primary" id="go">${a?'Següent':'Comprova'}</button></div>
+    ${a?'':`<div class="keys">${KEYS.map(k=>`<button class="key" data-k="${esc(k)}" tabindex="-1">${esc(k)}</button>`).join('')}</div>`}`;
+  }
+  let fb='';
+  if(a){
+    const right=it.kind==='mc'?it.opts[it.correct]:it.ans[0];
+    fb=`<div class="fb ${a.ok?'ok':'ko'}" role="status"><span class="verdict">${a.ok?'Correcte':(a.close?'Gairebé: revisa els accents':'No és correcte')}</span>${a.ok&&it.kind!=='mc'&&it.ans.length>1?`<span>També: ${esc(it.ans.slice(1,3).join(' · '))}</span>`:''}${!a.ok?`<span>Resposta: <b>${esc(right)}</b></span>`:''}<div>${it.exp||''}</div></div>
+    ${it.kind==='mc'?`<div><button class="btn primary" id="go">Següent</button></div>`:''}`;
+  }
+  const blockInfo = x.nb>1?`Bloc ${x.bi+1} de ${x.nb} · ${esc(x.block)}`:esc(x.block);
+  return `<section class="sess-top"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(RUN.title)}</span><button class="btn" id="quit" style="min-height:36px;padding:6px 12px">Surt</button></div>
+    <div class="row" style="justify-content:space-between"><span>${blockInfo}</span><span class="eyebrow">${RUN.i+1} / ${n}</span></div>
+    <div class="meter"><i style="width:${pct(RUN.i+(a?1:0),n)}%"></i></div></section>
+  <section class="card qcard"><div class="qtext">${it.q}</div>${it.sub?`<div class="qsub">${it.sub}</div>`:''}${body}${fb}</section>
+  <p class="muted" style="font-size:.85rem">Prem Retorn per comprovar i per passar a la següent.</p>`;
+}
+function answer(val){
+  const x=RUN.items[RUN.i], it=x.it; if(RUN.answered) return;
+  if(it.kind==='input' && !String(val).trim()) return;
+  const c=check(it,val); RUN.answered={val,ok:c.ok,close:c.close}; RUN.res.push({id:it.id,ok:c.ok,mod:it.mod});
+  const s=S.stats[it.mod]||(S.stats[it.mod]={ok:0,n:0}); s.n++; if(c.ok) s.ok++;
+  if(STATIC[it.id]) S.seen[it.id]=(S.seen[it.id]||0)+1;
+  if(!c.ok) S.err[it.id]=(S.err[it.id]||0)+1; else if(S.err[it.id]){ S.err[it.id]--; if(S.err[it.id]<=0) delete S.err[it.id]; }
+  save(); render();
+  const g=$('#go'); if(g) g.focus();
+}
+function next(){
+  RUN.i++; RUN.answered=null;
+  if(RUN.i>=RUN.items.length){ RUN.done=true;
+    if(RUN.kind==='day'){ const ok=RUN.res.filter(r=>r.ok).length; S.days[RUN.idx]={ok,n:RUN.res.length,at:iso(new Date()),att:RUN.att+1}; save(); }
+  }
+  render(); window.scrollTo(0,0);
+}
+function renderResult(){
+  const ok=RUN.res.filter(r=>r.ok).length, n=RUN.res.length;
+  const wrong=RUN.res.filter(r=>!r.ok).map(r=>itemById(r.id)).filter(Boolean);
+  const list=wrong.slice(0,12).map(it=>`<li><b>${esc(it.kind==='mc'?it.opts[it.correct]:it.ans[0])}</b> <span class="muted">— ${esc((it.q+' '+(it.sub||'')).replace(/<[^>]+>/g,'').slice(0,80))}</span></li>`).join('');
+  const np=nextPending();
+  return `<section class="card result"><span class="eyebrow">${esc(RUN.title)} · acabada</span><div class="bigscore">${ok}<span class="muted" style="font-size:1.4rem"> / ${n}</span></div>
+  <p>${pct(ok,n)>=85?'Molt bé! Aquest nivell és el que cal per al C1.':pct(ok,n)>=65?'Bona feina. Els errors tornaran a sortir divendres.':'Hi ha feina per fer: revisa la teoria d\'aquests temes i torna-hi.'}</p>
+  ${list?`<h3>Per repassar</h3><ul class="errlist">${list}</ul>`:''}
+  <div class="row"><button class="btn primary" id="home">Torna a l'inici</button>${RUN.kind==='day'&&np!=null&&np!==RUN.idx?`<button class="btn" data-start="${np}">Sessió següent</button>`:''}</div></section>`;
+}
+function bindRun(){
+  const m=$('#main');
+  const q=$('#quit'); if(q) q.onclick=()=>{ RUN=null; render(); };
+  const h=$('#home'); if(h) h.onclick=()=>setView('avui');
+  m.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>startDay(+b.dataset.start));
+  m.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>answer(+b.dataset.opt));
+  const inp=$('#ans'), go=$('#go');
+  if(go) go.onclick=()=>{ if(RUN.answered) next(); else if(inp) answer(inp.value); };
+  if(inp && !RUN.answered){ inp.focus(); inp.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); answer(inp.value);} }; }
+  m.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ if(!inp) return; const k=b.dataset.k, s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value=inp.value.slice(0,s)+k+inp.value.slice(e); inp.focus(); inp.setSelectionRange(s+k.length,s+k.length); });
+}
+document.addEventListener('keydown',e=>{
+  if(!RUN||RUN.done) return;
+  if(RUN.answered && e.key==='Enter' && document.activeElement?.id!=='go'){ e.preventDefault(); next(); return; }
+  const it=RUN.items[RUN.i].it;
+  if(!RUN.answered && it.kind==='mc' && /^[1-4]$/.test(e.key)){ const o=RUN.items[RUN.i].order[+e.key-1]; if(o) answer(o.i); }
+});
+render();
+initCloud();
+</script>
+</body></html>
