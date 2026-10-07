@@ -972,7 +972,7 @@ const KEY='catalaC1.v1';
 function mondayOf(d){ const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); const k=(x.getDay()+6)%7; x.setDate(x.getDate()-k); return x; }
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const parseISO=s=>{const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d);};
-function freshState(){ return {v:1,start:iso(mondayOf(new Date())),days:{},err:{},seen:{},stats:{},upd:0}; }
+function freshState(){ return {v:1,start:iso(mondayOf(new Date())),days:{},prog:{},err:{},seen:{},stats:{},upd:0}; }
 let S=freshState();
 try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&d.v===1) S=Object.assign(freshState(),d); } }catch(e){}
 
@@ -1036,7 +1036,7 @@ function sessionCard(idx,label){
     <div class="when"><span class="eyebrow">${label} · Setmana ${pl.w} de 16 · ${esc(fmtD(d))}</span>${st?`<span class="eyebrow" style="color:var(--ok)">Feta · ${st.ok}/${st.n}</span>`:''}</div>
     <h2>${esc(pl.wi.title)}</h2>
     <ol class="blocks">${items}</ol>
-    <div class="row"><button class="btn primary" data-start="${idx}">${st?'Torna-la a fer':'Comença la sessió'}</button>${S.err&&Object.keys(S.err).length?`<button class="btn" data-review="1">Repassa errors (${Object.keys(S.err).length})</button>`:''}</div>
+    <div class="row">${(S.prog&&S.prog[idx])?`<button class="btn primary" data-start="${idx}">Continua (${S.prog[idx].i} de ${S.prog[idx].items.length} fets)</button><button class="btn" data-restart="${idx}">Comença de nou</button>`:`<button class="btn primary" data-start="${idx}">${st?'Torna-la a fer':'Comença la sessió'}</button>`}${S.err&&Object.keys(S.err).length?`<button class="btn" data-review="1">Repassa errors (${Object.keys(S.err).length})</button>`:''}</div>
   </section>`;
 }
 function weekStrip(w){
@@ -1048,10 +1048,12 @@ function vAvui(){
   const t=todayIdx(), np=nextPending(); let html='';
   if(t.idx!=null){
     html+=sessionCard(t.idx,'Avui');
-    if(S.days[t.idx] && np!=null && np!==t.idx) html+=sessionCard(np,'Pendent');
+    const ip=Object.keys(S.prog||{}).map(Number).filter(i=>i!==t.idx).sort((a,b)=>a-b)[0];
+    if(ip!=null) html+=sessionCard(ip,'A mig fer');
+    else if(S.days[t.idx] && np!=null && np!==t.idx) html+=sessionCard(np,'Pendent');
   } else if(t.before){ html+=`<p class="muted">El pla comença el ${esc(fmtD(parseISO(S.start)))}. Pots avançar la primera sessió:</p>`+sessionCard(0,'Primera sessió'); }
   else if(t.after){ html+=`<section class="card"><h2>Has arribat al final del pla</h2><p class="muted">Fes servir Practica i el repàs d'errors per mantenir-te en forma fins a l'examen.</p></section>`; }
-  else { html+=`<p class="muted">Avui és cap de setmana. Si vols, recupera una sessió pendent o repassa els errors.</p>`; if(np!=null) html+=sessionCard(np,'Pendent'); }
+  else { html+=`<p class="muted">Avui és cap de setmana. Si vols, recupera una sessió pendent o repassa els errors.</p>`; { const ip=Object.keys(S.prog||{}).map(Number).sort((a,b)=>a-b)[0]; if(ip!=null) html+=sessionCard(ip,'A mig fer'); else if(np!=null) html+=sessionCard(np,'Pendent'); } }
   const ref = t.idx!=null?Math.floor(t.idx/5)+1 : (np!=null?Math.floor(np/5)+1:16);
   const T=totals();
   html+=`<section style="display:grid;gap:10px"><span class="eyebrow">Setmana ${ref}</span>${weekStrip(ref)}</section>
@@ -1068,7 +1070,7 @@ function vCal(){
     const wi=weekInfo(w); const d0=sessionDate((w-1)*5), d4=sessionDate((w-1)*5+4);
     h+=`<div class="wk ${wi.consol?'consol':''}"><header><span class="num">S${String(w).padStart(2,'0')}</span><h3>${esc(wi.title)}</h3><span class="muted" style="font-size:.85rem">${d0.getDate()}/${d0.getMonth()+1} – ${d4.getDate()}/${d4.getMonth()+1}</span></header><div class="cells">`;
     for(let d=0;d<5;d++){ const i=(w-1)*5+d, st=S.days[i], ex=wi.consol&&d===4;
-      h+=`<button class="cell ${st?'done':''} ${t.idx===i?'now':''} ${ex?'exam':''}" data-start="${i}">${DAB[d]} ${sessionDate(i).getDate()}<small>${st?pct(st.ok,st.n)+'%':(ex?'simulacre':'·')}</small></button>`; }
+      h+=`<button class="cell ${st?'done':''} ${t.idx===i?'now':''} ${ex?'exam':''}" data-start="${i}">${DAB[d]} ${sessionDate(i).getDate()}<small>${(S.prog&&S.prog[i])?S.prog[i].i+'/'+S.prog[i].items.length:(st?pct(st.ok,st.n)+'%':(ex?'simulacre':'·'))}</small></button>`; }
     h+=`</div></div>`;
   }
   return h+'</div>';
@@ -1103,6 +1105,7 @@ function vProg(){
 function bindView(){
   const m=$('#main');
   m.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>startDay(+b.dataset.start));
+  m.querySelectorAll('[data-restart]').forEach(b=>b.onclick=()=>startDay(+b.dataset.restart,true));
   m.querySelectorAll('[data-review]').forEach(b=>b.onclick=startReview);
   m.querySelectorAll('[data-prac]').forEach(b=>b.onclick=()=>{const [mod,t]=b.dataset.prac.split('|'); startPrac(mod,t||null);});
   m.querySelectorAll('[data-theo]').forEach(b=>b.onclick=()=>{THEO=b.dataset.theo; render();});
@@ -1111,10 +1114,17 @@ function bindView(){
 }
 
 // ---- sessions ----
-function startDay(idx){
+function startDay(idx,fresh){
   const pl=sessionPlan(idx); const att=(S.days[idx]&&S.days[idx].att)||0;
+  const P=S.prog&&S.prog[idx];
+  if(P && !fresh){
+    const items=P.items.map(([id,bi])=>{const it=itemById(id); const c=pl.blocks[bi]; return it&&{it,block:blockLabel(c[0],pl.wi),bi,nb:pl.blocks.length};}).filter(Boolean);
+    if(items.length){ begin({kind:'day',idx,att:P.att,title:`Setmana ${pl.w} · ${DAYN[pl.d]}`,items},P.i,P.res); return; }
+  }
+  if(S.prog) delete S.prog[idx];
   const r=mulberry32(hashStr('s'+idx+':'+att));
   const items=[]; pl.blocks.forEach(([c,n],bi)=>buildBlock(c,n,pl.wi,r,S).forEach(it=>items.push({it,block:blockLabel(c,pl.wi),bi,nb:pl.blocks.length})));
+  S.prog=S.prog||{}; S.prog[idx]={att,items:items.map(x=>[x.it.id,x.bi]),i:0,res:[]}; save();
   begin({kind:'day',idx,att,title:`Setmana ${pl.w} · ${DAYN[pl.d]}`,items});
 }
 function startPrac(mod,topic){
@@ -1127,10 +1137,12 @@ function startReview(){
   const r=mulberry32(Date.now()&0xffffffff);
   begin({kind:'review',title:'Repàs d\'errors',items:shuffle(ids.map(itemById).filter(Boolean),r).map(it=>({it,block:'Repàs d\'errors',bi:0,nb:1}))});
 }
-function begin(run){
+function begin(run,i0,res0){
   const r=mulberry32(hashStr(run.title+run.items.length));
   run.items.forEach(x=>{ if(x.it.kind==='mc'){ const o=x.it.opts.map((t,i)=>({t,i})); const keep=o.some(z=>/\(res\)|dues|les dues/.test(z.t)); x.order=keep?o:shuffle(o,r);} });
-  RUN=Object.assign(run,{i:0,res:[],answered:null,done:false}); render(); window.scrollTo(0,0);
+  RUN=Object.assign(run,{i:i0||0,res:(res0||[]).slice(),answered:null,done:false});
+  if(RUN.i>=RUN.items.length){ RUN.i=RUN.items.length-1; RUN.answered={val:'',ok:true}; next(); return; }
+  render(); window.scrollTo(0,0);
 }
 const KEYS=['à','è','é','í','ï','ò','ó','ú','ü','ç','l·l','\''];
 function renderQ(){
@@ -1149,7 +1161,7 @@ function renderQ(){
     ${it.kind==='mc'?`<div><button class="btn primary" id="go">Següent</button></div>`:''}`;
   }
   const blockInfo = x.nb>1?`Bloc ${x.bi+1} de ${x.nb} · ${esc(x.block)}`:esc(x.block);
-  return `<section class="sess-top"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(RUN.title)}</span><button class="btn" id="quit" style="min-height:36px;padding:6px 12px">Surt</button></div>
+  return `<section class="sess-top"><div class="row" style="justify-content:space-between"><span class="eyebrow">${esc(RUN.title)}</span><button class="btn" id="quit" style="min-height:36px;padding:6px 12px">${RUN.kind==="day"?"Desa i surt":"Surt"}</button></div>
     <div class="row" style="justify-content:space-between"><span>${blockInfo}</span><span class="eyebrow">${RUN.i+1} / ${n}</span></div>
     <div class="meter"><i style="width:${pct(RUN.i+(a?1:0),n)}%"></i></div></section>
   <section class="card qcard"><div class="qtext">${it.q}</div>${it.sub?`<div class="qsub">${it.sub}</div>`:''}${body}${fb}</section>
@@ -1162,13 +1174,14 @@ function answer(val){
   const s=S.stats[it.mod]||(S.stats[it.mod]={ok:0,n:0}); s.n++; if(c.ok) s.ok++;
   if(STATIC[it.id]) S.seen[it.id]=(S.seen[it.id]||0)+1;
   if(!c.ok) S.err[it.id]=(S.err[it.id]||0)+1; else if(S.err[it.id]){ S.err[it.id]--; if(S.err[it.id]<=0) delete S.err[it.id]; }
+  if(RUN.kind==='day'&&S.prog&&S.prog[RUN.idx]){ S.prog[RUN.idx].i=RUN.i+1; S.prog[RUN.idx].res=RUN.res.slice(); }
   save(); render();
   const g=$('#go'); if(g) g.focus();
 }
 function next(){
   RUN.i++; RUN.answered=null;
   if(RUN.i>=RUN.items.length){ RUN.done=true;
-    if(RUN.kind==='day'){ const ok=RUN.res.filter(r=>r.ok).length; S.days[RUN.idx]={ok,n:RUN.res.length,at:iso(new Date()),att:RUN.att+1}; save(); }
+    if(RUN.kind==='day'){ const ok=RUN.res.filter(r=>r.ok).length; S.days[RUN.idx]={ok,n:RUN.res.length,at:iso(new Date()),att:RUN.att+1}; if(S.prog) delete S.prog[RUN.idx]; save(); }
   }
   render(); window.scrollTo(0,0);
 }
